@@ -1,1275 +1,146 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>AERIVA Journeys | Curated Escapes from Hyderabad — 3D Earth Experience</title>
-  <meta name="description"
-    content="AERIVA Journeys — Curated luxury escapes to the Maldives, Bali, Singapore, and Seychelles. An unbroken 3D journey from Earth orbit to tropical sanctuaries.">
+  <meta name="description" content="AERIVA Journeys — Curated luxury escapes to the Maldives, Bali, Singapore, and Seychelles. An unbroken 3D journey from Earth orbit to tropical sanctuaries.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,500;0,600;1,500;1,600&display=swap"
-    rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,500;0,600;1,500;1,600&display=swap" rel="stylesheet">
   <style>
-    :root {
-      --coral: #e07a5f;
-      --red: #d94b34;
-      --teal: #0fa4af;
-      --cyan: #48cae4;
-      --deep: #031418;
-      --deep-glow: #0d3840
-    }
-
-    :root {
-      --coral: #e07a5f;
-      --red: #d94b34;
-      --teal: #0fa4af;
-      --cyan: #48cae4;
-      --gold: #ffd166;
-      --deep: #031418;
-      --deep-glow: #0d3840
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0
-    }
-
-    html,
-    body {
-      height: 100%;
-      overflow: hidden;
-      background: var(--deep);
-      color: #fff;
-      font-family: Montserrat, system-ui, sans-serif;
-      -webkit-font-smoothing: antialiased
-    }
-
-    a {
-      color: inherit;
-      text-decoration: none
-    }
-
-    button {
-      font: inherit;
-      color: inherit;
-      background: none;
-      border: 0;
-      cursor: pointer
-    }
-
-    .hero {
-      position: fixed;
-      inset: 0;
-      overflow: hidden;
-      background: radial-gradient(58% 72% at 50% 47%, #0d3840 0%, #07262c 34%, #04181c 65%, #020c0f 100%)
-    }
-
-    .hero>* {
-      position: absolute
-    }
-
-    #word0 {
-      left: 50%;
-      top: 50%;
-      font-weight: 900;
-      font-size: min(24vw, 46vh);
-      line-height: .8;
-      letter-spacing: -.035em;
-      white-space: nowrap;
-      z-index: 2;
-      will-change: transform, clip-path
-    }
-
-    #eyebrow {
-      left: 50%;
-      top: 50%;
-      z-index: 3;
-      font-weight: 400;
-      font-size: clamp(12px, 1.35vw, 20px);
-      letter-spacing: .14em;
-      text-transform: uppercase;
-      white-space: nowrap;
-      color: #d8ecee
-    }
-
-    /* Word0: Scaled defensively so it NEVER overflows or crops on any screen */
-    #word0 {
-      left: 50%;
-      top: 50%;
-      font-weight: 900;
-      font-size: clamp(42px, 13.8vw, 165px);
-      line-height: .85;
-      letter-spacing: -.03em;
-      white-space: nowrap;
-      z-index: 2;
-      will-change: transform, clip-path;
-      text-align: center
-    }
-
-    #eyebrow {
-      left: 50%;
-      top: 50%;
-      z-index: 3;
-      font-weight: 400;
-      font-size: clamp(10.5px, 1.2vw, 15px);
-      letter-spacing: .15em;
-      text-transform: uppercase;
-      white-space: nowrap;
-      color: #d8ecee;
-      max-width: 92vw;
-      text-align: center
-    }
-
-    #gl {
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 4;
-      cursor: grab;
-      touch-action: none
-    }
-
-    #gl.drag {
-      cursor: grabbing
-    }
-
-    #dust {
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 5;
-      pointer-events: none
-    }
-
-    #flare {
-      z-index: 1;
-      width: 48vmin;
-      height: 48vmin;
-      margin: -24vmin;
-      border-radius: 50%;
-      pointer-events: none;
-      background: radial-gradient(closest-side, rgba(240, 252, 255, .95), rgba(100, 215, 240, .45) 28%, rgba(20, 140, 180, .12) 60%, transparent)
-    }
-
-    #pin {
-      z-index: 6;
-      left: 0;
-      top: 0;
-      display: flex;
-      align-items: center;
-      gap: 9px;
-      font-weight: 600;
-      font-size: 11px;
-      letter-spacing: .16em;
-      text-transform: uppercase;
-      pointer-events: none;
-      white-space: nowrap
-    }
-
-    #pin i {
-      width: 12px;
-      height: 12px;
-      border-radius: 50%;
-      background: #fff;
-      position: relative;
-      box-shadow: 0 0 0 4px rgba(15, 164, 175, .85)
-    }
-
-    #pin i::after {
-      content: "";
-      position: absolute;
-      inset: -13px;
-      border-radius: 50%;
-      border: 1px solid rgba(255, 255, 255, .9);
-      animation: pulse 2s ease-out infinite
-    }
-
-    /* Interactive Globe Destination Pins */
-    #globePins {
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      z-index: 6;
-      pointer-events: none
-    }
-
-    .globe-pin {
-      position: absolute;
-      display: flex;
-      align-items: center;
-      gap: 7px;
-      cursor: pointer;
-      white-space: nowrap;
-      transform: translate(-7px, -50%);
-      transition: transform .2s cubic-bezier(.2, 0, .2, 1);
-      pointer-events: auto;
-      user-select: none
-    }
-
-    .globe-pin:hover {
-      transform: translate(-7px, -50%) scale(1.08)
-    }
-
-    .pin-beacon {
-      width: 16px;
-      height: 16px;
-      display: grid;
-      place-items: center;
-      position: relative;
-      flex-shrink: 0
-    }
-
-    .pin-beacon i {
-      width: 8px;
-      height: 8px;
-      border-radius: 50%;
-      background: #fff;
-      box-shadow: 0 0 0 3px rgba(15, 164, 175, .85);
-      transition: box-shadow .25s, transform .25s
-    }
-
-    .globe-pin:hover .pin-beacon i {
-      transform: scale(1.25);
-      box-shadow: 0 0 0 5px rgba(15, 164, 175, 1)
-    }
-
-    .pin-beacon i::after {
-      content: "";
-      position: absolute;
-      inset: -11px;
-      border-radius: 50%;
-      border: 1px solid rgba(255, 255, 255, .8);
-      animation: pulse 2.2s ease-out infinite
-    }
-
-    @keyframes pulse {
-      from {
-        transform: scale(.4);
-        opacity: 1
-      }
-
-      to {
-        transform: scale(1.4);
-        opacity: 0
-      }
-    }
-
-    .pin-label {
-      padding: 4px 10px;
-      border-radius: 12px;
-      background: rgba(3, 20, 24, .84);
-      border: 1px solid rgba(255, 255, 255, .25);
-      color: #e2f4f7;
-      font-size: 10px;
-      font-weight: 600;
-      letter-spacing: .12em;
-      text-transform: uppercase;
-      backdrop-filter: blur(6px);
-      transition: all .2s;
-      box-shadow: 0 4px 14px rgba(0, 0, 0, .45)
-    }
-
-    .globe-pin:hover .pin-label {
-      background: rgba(15, 164, 175, .95);
-      color: #fff;
-      border-color: rgba(255, 255, 255, .6);
-      box-shadow: 0 6px 20px rgba(15, 164, 175, .5)
-    }
-
-    .globe-pin.active .pin-beacon i {
-      background: #fff;
-      box-shadow: 0 0 0 5px rgba(224, 122, 95, .95)
-    }
-
-    .globe-pin.active .pin-label {
-      background: var(--coral);
-      color: #fff;
-      border-color: rgba(255, 255, 255, .8);
-      font-weight: 700;
-      box-shadow: 0 6px 20px rgba(224, 122, 95, .4)
-    }
-
-    .globe-pin.pin-hub .pin-beacon i {
-      background: #ffd166;
-      box-shadow: 0 0 0 3.5px rgba(255, 209, 102, .85)
-    }
-
-    .globe-pin.pin-hub .pin-label {
-      background: rgba(28, 20, 5, .88);
-      border-color: rgba(255, 209, 102, .5);
-      color: #ffe49e
-    }
-
-    #word1 {
-      left: 50%;
-      top: 0;
-      z-index: 6;
-      font-weight: 800;
-      font-size: min(9.4vw, 19vh);
-      letter-spacing: -.02em;
-      line-height: 1;
-      color: rgba(255, 255, 255, .76);
-      pointer-events: none;
-      white-space: nowrap
-    }
-
-    #word1 {
-      left: 50%;
-      top: 0;
-      z-index: 6;
-      font-weight: 800;
-      font-size: clamp(30px, 7.8vw, 86px);
-      letter-spacing: -.02em;
-      line-height: 1;
-      color: rgba(255, 255, 255, .76);
-      pointer-events: none;
-      white-space: nowrap;
-      max-width: 92vw;
-      text-align: center
-    }
-
-    #sites {
-      right: 6.2%;
-      top: 50%;
-      z-index: 7;
-      list-style: none;
-      display: grid;
-      gap: clamp(30px, 6.6vh, 62px);
-      transform: translateY(-50%)
-    }
-
-    #sites {
-      right: 6.2%;
-      top: 50%;
-      z-index: 7;
-      list-style: none;
-      display: grid;
-      gap: clamp(26px, 5.8vh, 56px);
-      transform: translateY(-50%)
-    }
-
-    #sites::before {
-      content: "";
-      position: absolute;
-      right: 5px;
-      top: 6px;
-      bottom: 6px;
-      width: 1px;
-      background: rgba(255, 255, 255, .35)
-    }
-
-    #sites li {
-      position: relative;
-      text-align: right;
-      padding-right: 30px;
-      cursor: pointer;
-      font-weight: 500;
-      font-size: 11.5px;
-      letter-spacing: .08em;
-      text-transform: uppercase;
-      transition: font-size .3s, color .25s;
-      color: rgba(255, 255, 255, .8)
-    }
-
-    #sites li:hover {
-      color: #fff
-    }
-
-    #sites li {
-      position: relative;
-      text-align: right;
-      padding-right: 30px;
-      cursor: pointer;
-      font-weight: 500;
-      font-size: 12px;
-      letter-spacing: .08em;
-      text-transform: uppercase;
-      transition: font-size .3s, color .25s, transform .25s;
-      color: rgba(255, 255, 255, .75)
-    }
-
-    #sites li:hover {
-      color: #fff;
-      transform: translateX(-3px)
-    }
-
-    #sites li::after {
-      content: "";
-      position: absolute;
-      right: 1px;
-      top: 50%;
-      width: 9px;
-      height: 9px;
-      margin-top: -5px;
-      border-radius: 50%;
-      background: #fff;
-      transition: transform .3s, box-shadow .3s
-    }
-
-    #sites li.on {
-      font-size: 15px;
-      color: #fff;
-      font-weight: 700
-    }
-
-    #sites li.on::after {
-      transform: scale(1.5);
-      box-shadow: 0 0 0 7px rgba(15, 164, 175, .45)
-    }
-
-    #sites li.on::after {
-      transform: scale(1.55);
-      box-shadow: 0 0 0 7px rgba(15, 164, 175, .45)
-    }
-
-    #card {
-      right: calc(6.2% + 196px);
-      top: 0;
-      z-index: 7;
-      width: clamp(180px, 16vw, 260px);
-      aspect-ratio: 1.42;
-      background-repeat: no-repeat;
-      background-size: cover;
-      background-position: center;
-      border-radius: 4px;
-      box-shadow: 0 22px 50px rgba(0, 10, 14, .65);
-      overflow: visible;
-      border: 1px solid rgba(255, 255, 255, .15)
-    }
-
-    #card a {
-      position: absolute;
-      left: -26px;
-      bottom: 18%;
-      background: var(--red);
-      color: #fff;
-      font-weight: 600;
-      font-size: 10.5px;
-      letter-spacing: .1em;
-      text-transform: uppercase;
-      padding: 10px 16px;
-      border-radius: 2px;
-      box-shadow: 0 8px 20px rgba(217, 75, 52, .45);
-      transition: background .2s, transform .2s
-    }
-
-    #card a:hover {
-      background: #b83722;
-      transform: scale(1.04)
-    }
-
-    #card {
-      right: calc(6.2% + 204px);
-      top: 0;
-      z-index: 7;
-      width: clamp(185px, 16.5vw, 270px);
-      aspect-ratio: 1.42;
-      background-repeat: no-repeat;
-      background-size: cover;
-      background-position: center;
-      border-radius: 4px;
-      box-shadow: 0 24px 55px rgba(0, 10, 14, .7);
-      overflow: visible;
-      border: 1px solid rgba(255, 255, 255, .18)
-    }
-
-    #card a {
-      position: absolute;
-      left: -26px;
-      bottom: 18%;
-      background: var(--red);
-      color: #fff;
-      font-weight: 600;
-      font-size: 10.5px;
-      letter-spacing: .1em;
-      text-transform: uppercase;
-      padding: 10px 18px;
-      border-radius: 2px;
-      box-shadow: 0 8px 22px rgba(217, 75, 52, .45);
-      transition: background .2s, transform .2s;
-      white-space: nowrap
-    }
-
-    #card a:hover {
-      background: #b83722;
-      transform: scale(1.05)
-    }
-
-    #region {
-      left: 50%;
-      top: 50%;
-      z-index: 7;
-      transform: translate(-50%, -50%);
-      font-weight: 600;
-      font-size: clamp(26px, 3.4vw, 54px);
-      letter-spacing: .06em;
-      pointer-events: none;
-      text-align: center;
-      text-shadow: 0 4px 20px rgba(0, 0, 0, .6)
-    }
-
-    #region {
-      left: 50%;
-      top: 50%;
-      z-index: 7;
-      transform: translate(-50%, -50%);
-      font-weight: 600;
-      font-size: clamp(24px, 3.2vw, 50px);
-      letter-spacing: .06em;
-      pointer-events: none;
-      text-align: center;
-      text-shadow: 0 4px 20px rgba(0, 0, 0, .6);
-      max-width: 90vw
-    }
-
-    #land,
-    #fore {
-      inset: 0;
-      background-size: cover;
-      background-repeat: no-repeat
-    }
-
-    #land {
-      z-index: 8;
-      background-position: 50% 50%;
-      will-change: transform
-    }
-
-    #dest {
-      left: 0;
-      right: 0;
-      top: 0;
-      z-index: 9;
-      text-align: center;
-      pointer-events: none
-    }
-
-    #dest small {
-      display: block;
-      font-weight: 400;
-      font-size: min(4.2vw, 9vh);
-      line-height: 1;
-      letter-spacing: .08em;
-      text-transform: uppercase;
-      opacity: .92;
-      color: #d2f0f4
-    }
-
-    #dest b {
-      display: block;
-      margin-top: .04em;
-      font-weight: 900;
-      font-size: min(9.4vw, 19vh);
-      line-height: 1;
-      letter-spacing: -.03em;
-      text-transform: uppercase;
-      white-space: nowrap;
-      color: #ffffff;
-      text-shadow: 0 6px 28px rgba(3, 20, 24, .7)
-    }
-
-    #dest {
-      left: 0;
-      right: 0;
-      top: 0;
-      z-index: 9;
-      text-align: center;
-      pointer-events: none;
-      padding: 0 16px
-    }
-
-    #dest small {
-      display: block;
-      font-weight: 400;
-      font-size: clamp(12px, 2.8vw, 22px);
-      line-height: 1.2;
-      letter-spacing: .1em;
-      text-transform: uppercase;
-      opacity: .92;
-      color: #d2f0f4;
-      max-width: 92vw;
-      margin: 0 auto
-    }
-
-    #dest b {
-      display: block;
-      margin-top: .04em;
-      font-weight: 900;
-      font-size: clamp(38px, 8.4vw, 105px);
-      line-height: 1;
-      letter-spacing: -.03em;
-      text-transform: uppercase;
-      white-space: nowrap;
-      color: #ffffff;
-      text-shadow: 0 6px 28px rgba(3, 20, 24, .75);
-      max-width: 94vw;
-      margin-left: auto;
-      margin-right: auto
-    }
-
-    #fore {
-      z-index: 10;
-      background-position: 50% 100%;
-      will-change: transform;
-      pointer-events: none
-    }
-
-    #fog {
-      inset: 0;
-      z-index: 11;
-      pointer-events: none;
-      background: radial-gradient(70% 64% at 50% 46%, #f0fbfc 0%, #d2f2f5 48%, #206c78 100%)
-    }
-
-    #scrim {
-      left: 0;
-      right: 0;
-      top: 0;
-      height: 160px;
-      z-index: 13;
-      pointer-events: none;
-      background: linear-gradient(rgba(2, 16, 20, .72), rgba(2, 16, 20, 0))
-    }
-
-    #bar {
-      left: 50%;
-      bottom: 7.5vh;
-      z-index: 12;
-      width: min(86vw, 920px);
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr 68px;
-      background: #fff;
-      color: #18282b;
-      border-radius: 4px;
-      box-shadow: 0 24px 60px rgba(2, 14, 18, .6)
-    }
-
-    #bar div {
-      padding: 15px 22px;
-      border-right: 1px solid #e2edea
-    }
-
-    #bar label {
-      display: block;
-      font-weight: 600;
-      font-size: 10px;
-      letter-spacing: .1em;
-      text-transform: uppercase;
-      color: #7a9497
-    }
-
-    #bar input {
-      width: 100%;
-      margin-top: 5px;
-      border: 0;
-      outline: 0;
-      font: 600 15px Montserrat, sans-serif;
-      color: #18282b;
-      background: none
-    }
-
-    #bar {
-      left: 50%;
-      bottom: 7.5vh;
-      z-index: 12;
-      width: min(88vw, 900px);
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr 68px;
-      background: #fff;
-      color: #18282b;
-      border-radius: 4px;
-      box-shadow: 0 24px 60px rgba(2, 14, 18, .6)
-    }
-
-    #bar div {
-      padding: 14px 20px;
-      border-right: 1px solid #e2edea;
-      min-width: 0
-    }
-
-    #bar label {
-      display: block;
-      font-weight: 600;
-      font-size: 10px;
-      letter-spacing: .1em;
-      text-transform: uppercase;
-      color: #7a9497;
-      white-space: nowrap
-    }
-
-    #bar input {
-      width: 100%;
-      margin-top: 5px;
-      border: 0;
-      outline: 0;
-      font: 600 14px Montserrat, sans-serif;
-      color: #18282b;
-      background: none;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap
-    }
-
-    #bar button {
-      background: var(--red);
-      color: #fff;
-      border-radius: 0 4px 4px 0;
-      font-size: 22px;
-      transition: background .25s;
-      display: grid;
-      place-items: center
-    }
-
-    #bar button:hover {
-      background: #b83722
-    }
-
-    /* Header Chrome */
-    header {
-      left: 0;
-      right: 0;
-      top: 0;
-      z-index: 20;
-      display: flex;
-      align-items: center;
-      padding: clamp(18px, 3.2vh, 30px) clamp(20px, 2.6vw, 42px);
-      font-size: 11.5px;
-      font-weight: 500;
-      letter-spacing: .06em;
-      text-transform: uppercase;
-      pointer-events: none
-    }
-
-    header {
-      left: 0;
-      right: 0;
-      top: 0;
-      z-index: 20;
-      display: flex;
-      align-items: center;
-      padding: clamp(16px, 2.8vh, 28px) clamp(18px, 2.5vw, 40px);
-      font-size: 11.5px;
-      font-weight: 500;
-      letter-spacing: .06em;
-      text-transform: uppercase;
-      pointer-events: none
-    }
-
-    header>* {
-      pointer-events: auto
-    }
-
-    .logo {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      margin-right: auto;
-      font-weight: 800;
-      font-size: 19px;
-      letter-spacing: -.01em;
-      text-transform: none
-    }
-
-    .logo svg {
-      width: 34px;
-      height: 34px;
-      flex-shrink: 0
-    }
-
-    .logo-sub {
-      font-weight: 400;
-      font-size: 11px;
-      letter-spacing: .18em;
-      margin-left: 4px;
-      opacity: .8;
-      display: inline-block;
-      vertical-align: middle
-    }
-
-    .origin-pill {
-      margin-left: clamp(14px, 2.2vw, 30px);
-      padding: 6px 14px;
-      border-radius: 20px;
-      border: 1px solid rgba(255, 255, 255, .25);
-      font-size: 10px;
-      letter-spacing: .12em;
-      opacity: .9;
-      background: rgba(255, 255, 255, .05);
-      backdrop-filter: blur(4px)
-    }
-
-    header a {
-      margin-left: clamp(16px, 2.6vw, 38px);
-      opacity: .9;
-      transition: opacity .2s
-    }
-
-    .origin-pill {
-      margin-left: clamp(12px, 2vw, 28px);
-      padding: 6px 14px;
-      border-radius: 20px;
-      border: 1px solid rgba(255, 255, 255, .25);
-      font-size: 10px;
-      letter-spacing: .12em;
-      opacity: .9;
-      background: rgba(255, 255, 255, .05);
-      backdrop-filter: blur(4px);
-      white-space: nowrap
-    }
-
-    header a {
-      margin-left: clamp(14px, 2.4vw, 36px);
-      opacity: .9;
-      transition: opacity .2s;
-      white-space: nowrap
-    }
-
-    header a:hover {
-      opacity: 1
-    }
-
-    .ico {
-      width: 42px;
-      height: 42px;
-      margin-left: clamp(14px, 2.4vw, 36px);
-      border-radius: 50%;
-      display: grid;
-      place-items: center;
-      background: rgba(255, 255, 255, .15);
-      backdrop-filter: blur(6px);
-      transition: background .25s
-    }
-
-    .ico {
-      width: 40px;
-      height: 40px;
-      margin-left: clamp(12px, 2.2vw, 32px);
-      border-radius: 50%;
-      display: grid;
-      place-items: center;
-      background: rgba(255, 255, 255, .15);
-      backdrop-filter: blur(6px);
-      transition: background .25s;
-      flex-shrink: 0
-    }
-
-    .ico:hover {
-      background: rgba(255, 255, 255, .3)
-    }
-
-    .ico svg,
-    .srch svg {
-      width: 16px;
-      height: 16px;
-      fill: none;
-      stroke: #fff;
-      stroke-width: 2;
-      stroke-linecap: round
-    }
-
-    .srch {
-      margin-left: clamp(16px, 2.6vw, 38px);
-      cursor: pointer
-    }
-
-    #rail {
-      left: clamp(20px, 2.6vw, 42px);
-      top: 50%;
-      z-index: 20;
-      display: grid;
-      gap: 15px;
-      transform: translateY(-50%)
-    }
-
-    .srch {
-      margin-left: clamp(14px, 2.4vw, 34px);
-      cursor: pointer;
-      display: grid;
-      place-items: center
-    }
-
-    #rail {
-      left: clamp(18px, 2.4vw, 38px);
-      top: 50%;
-      z-index: 20;
-      display: grid;
-      gap: 15px;
-      transform: translateY(-50%)
-    }
-
-    #rail button {
-      width: 9px;
-      height: 9px;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, .45);
-      transition: background .3s, transform .3s
-    }
-
-    #rail button.on {
-      background: #fff;
-      transform: scale(1.35);
-      box-shadow: 0 0 10px rgba(15, 164, 175, .8)
-    }
-
-    #hint {
-      left: 50%;
-      bottom: 4.4vh;
-      transform: translateX(-50%);
-      z-index: 7;
-      font-weight: 400;
-      font-size: 11px;
-      letter-spacing: .18em;
-      text-transform: uppercase;
-      opacity: .82;
-      white-space: nowrap;
-      color: #d2ecef
-    }
-
-    #hint {
-      left: 50%;
-      bottom: 3.8vh;
-      transform: translateX(-50%);
-      z-index: 7;
-      font-weight: 400;
-      font-size: 11px;
-      letter-spacing: .18em;
-      text-transform: uppercase;
-      opacity: .82;
-      white-space: nowrap;
-      color: #d2ecef
-    }
-
-    /* AERIVA Bespoke Booking & Itinerary Modal */
-    .aeriva-modal {
-      position: fixed;
-      inset: 0;
-      z-index: 100;
-      background: rgba(2, 16, 20, .82);
-      backdrop-filter: blur(10px);
-      display: grid;
-      place-items: center;
-      padding: 20px;
-      opacity: 0;
-      pointer-events: none;
-      transition: opacity .3s ease
-    }
-
-    .aeriva-modal.open {
-      opacity: 1;
-      pointer-events: auto
-    }
-
-    .aeriva-dialog {
-      background: #fff;
-      color: #18282b;
-      width: min(90vw, 560px);
-      border-radius: 4px;
-      padding: 36px;
-      box-shadow: 0 30px 80px rgba(0, 0, 0, .65);
-      position: relative
-    }
-
-    .aeriva-dialog-head {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 18px
-    }
-
-    .aeriva-dialog-tag {
-      font-size: 10px;
-      font-weight: 700;
-      letter-spacing: .18em;
-      text-transform: uppercase;
-      color: var(--red)
-    }
-
-    .aeriva-dialog-close {
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      display: grid;
-      place-items: center;
-      font-size: 20px;
-      color: #7a9497;
-      transition: color .2s
-    }
-
-    .aeriva-dialog-close:hover {
-      color: #000
-    }
-
-    .aeriva-dialog h2 {
-      font-size: 28px;
-      font-weight: 900;
-      letter-spacing: -.02em;
-      line-height: 1.15;
-      margin-bottom: 12px;
-      color: #0e1d20
-    }
-
-    .aeriva-dialog h2 em {
-      font-family: 'Playfair Display', serif;
-      font-weight: 500;
-      font-style: italic
-    }
-
-    .aeriva-dialog p {
-      font-size: 13.5px;
-      line-height: 1.6;
-      color: #546e72;
-      margin-bottom: 24px
-    }
-
-    .aeriva-meta-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      background: #f3f9f8;
-      border: 1px solid #d9e9e6;
-      padding: 18px;
-      border-radius: 3px;
-      margin-bottom: 24px
-    }
-
-    .aeriva-meta-grid div span {
-      display: block;
-      font-size: 9.5px;
-      letter-spacing: .1em;
-      text-transform: uppercase;
-      color: #7a9598;
-      margin-bottom: 3px
-    }
-
-    .aeriva-meta-grid div strong {
-      font-size: 13px;
-      font-weight: 700;
-      color: #102528
-    }
-
-    .aeriva-dialog-actions {
-      display: flex;
-      gap: 12px
-    }
-
-    .aeriva-dialog-actions .btn-confirm {
-      flex: 1;
-      background: var(--red);
-      color: #fff;
-      font-weight: 600;
-      font-size: 12px;
-      letter-spacing: .1em;
-      text-transform: uppercase;
-      padding: 14px;
-      border-radius: 2px;
-      transition: background .2s;
-      text-align: center
-    }
-
-    .aeriva-dialog-actions .btn-confirm:hover {
-      background: #b83722
-    }
-
-    .aeriva-dialog-actions .btn-copy {
-      flex: 1;
-      background: #eef6f5;
-      color: #18282b;
-      font-weight: 600;
-      font-size: 12px;
-      letter-spacing: .1em;
-      text-transform: uppercase;
-      padding: 14px;
-      border-radius: 2px;
-      transition: background .2s
-    }
-
-    .aeriva-dialog-actions .btn-copy:hover {
-      background: #dbebe8
-    }
-
-    @media (max-width:760px) {
-      /* Responsive Overrides (Mobile & Tablet) */
-      @media (max-width:860px) {
-
-        header a:not(.logo),
-        .origin-pill {
-          display: none
-        }
-
-        #word0 {
-          font-size: 28vw
-        }
-
-        #word0 {
-          font-size: clamp(36px, 12.5vw, 76px);
-          letter-spacing: -.02em
-        }
-
-        #eyebrow {
-          font-size: 11px
-        }
-
-        #word1 {
-          font-size: 15vw
-        }
-
-        #sites {
-          right: 18px;
-          top: auto;
-          bottom: 11vh;
-          transform: none;
-          gap: 22px
-        }
-
-        #card {
-          right: auto;
-          left: 18px;
-          top: auto !important;
-          bottom: 11vh;
-          width: 42vw
-        }
-
-        #card a {
-          left: 8px;
-          bottom: 8px
-        }
-
-        #dest b {
-          font-size: 11vw
-        }
-
-        #dest small {
-          font-size: 6vw
-        }
-
-        #bar {
-          grid-template-columns: 1fr 1fr;
-          width: calc(100vw - 32px);
-          bottom: 4vh
-        }
-
-        #word1 {
-          font-size: clamp(26px, 8.5vw, 48px)
-        }
-
-        /* Horizontal bottom selector for mobile to prevent overflow */
-        #sites {
-          right: 0;
-          left: 0;
-          top: auto;
-          bottom: 12vh;
-          transform: none;
-          display: flex;
-          justify-content: center;
-          gap: 10px;
-          padding: 0 12px;
-          width: 100vw;
-          overflow-x: auto;
-          -webkit-overflow-scrolling: touch
-        }
-
-        #sites::before {
-          display: none
-        }
-
-        #sites li {
-          padding: 8px 14px;
-          background: rgba(3, 20, 24, .75);
-          border-radius: 20px;
-          border: 1px solid rgba(255, 255, 255, .2);
-          backdrop-filter: blur(6px);
-          font-size: 11px;
-          white-space: nowrap
-        }
-
-        #sites li small {
-          display: none !important
-        }
-
-        #sites li::after {
-          display: none
-        }
-
-        #sites li.on {
-          background: var(--coral);
-          border-color: rgba(255, 255, 255, .6);
-          font-size: 11px;
-          transform: none
-        }
-
-        #card {
-          right: auto;
-          left: 50%;
-          transform: translateX(-50%) !important;
-          top: auto !important;
-          bottom: 18vh;
-          width: min(68vw, 240px)
-        }
-
-        #card a {
-          left: 8px;
-          bottom: 8px;
-          padding: 8px 14px;
-          font-size: 9.5px
-        }
-
-        #dest b {
-          font-size: clamp(32px, 10vw, 64px)
-        }
-
-        #dest small {
-          font-size: clamp(11px, 3.6vw, 15px)
-        }
-
-        #bar {
-          grid-template-columns: 1fr 1fr;
-          width: calc(100vw - 28px);
-          bottom: 3vh
-        }
-
-        #bar div:nth-child(2) {
-          border-right: 0
-        }
-
-        #bar div {
-          padding: 11px 14px;
-          border-bottom: 1px solid #e2edea
-        }
-
-        #bar button {
-          height: 46px;
-          border-radius: 0 0 4px 0
-        }
-
-        #bar div {
-          padding: 10px 14px;
-          border-bottom: 1px solid #e2edea
-        }
-
-        #bar div:nth-child(3) {
-          grid-column: span 2
-        }
-
-        #bar button {
-          grid-column: span 2;
-          height: 46px;
-          border-radius: 0 0 4px 4px
-        }
-
-        #hint,
-        #rail {
-          display: none
-        }
-
-        #fore {
-          background-size: 220% auto
-        }
-      }
+:root{--coral:#e07a5f;--red:#d94b34;--teal:#0fa4af;--cyan:#48cae4;--gold:#ffd166;--deep:#031418;--deep-glow:#0d3840}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden;background:var(--deep);color:#fff;font-family:Montserrat,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+
+.hero{position:fixed;inset:0;overflow:hidden;background:radial-gradient(58% 72% at 50% 47%,#0d3840 0%,#07262c 34%,#04181c 65%,#020c0f 100%)}
+.hero>*{position:absolute}
+
+/* Word0: Scaled defensively so it NEVER overflows or crops on any screen */
+#word0{left:50%;top:50%;font-weight:900;font-size:clamp(42px,13.8vw,165px);line-height:.85;letter-spacing:-.03em;white-space:nowrap;z-index:2;will-change:transform,clip-path;text-align:center}
+#eyebrow{left:50%;top:50%;z-index:3;font-weight:400;font-size:clamp(10.5px,1.2vw,15px);letter-spacing:.15em;text-transform:uppercase;white-space:nowrap;color:#d8ecee;max-width:92vw;text-align:center}
+#gl{inset:0;width:100%;height:100%;z-index:4;cursor:grab;touch-action:none}
+#gl.drag{cursor:grabbing}
+#dust{inset:0;width:100%;height:100%;z-index:5;pointer-events:none}
+#flare{z-index:1;width:48vmin;height:48vmin;margin:-24vmin;border-radius:50%;pointer-events:none;background:radial-gradient(closest-side,rgba(240,252,255,.95),rgba(100,215,240,.45) 28%,rgba(20,140,180,.12) 60%,transparent)}
+
+/* Interactive Globe Destination Pins */
+#globePins{inset:0;width:100%;height:100%;z-index:6;pointer-events:none}
+.globe-pin{position:absolute;display:flex;align-items:center;gap:7px;cursor:pointer;white-space:nowrap;transform:translate(-7px,-50%);transition:transform .2s cubic-bezier(.2,0,.2,1);pointer-events:auto;user-select:none}
+.globe-pin:hover{transform:translate(-7px,-50%) scale(1.08)}
+.pin-beacon{width:16px;height:16px;display:grid;place-items:center;position:relative;flex-shrink:0}
+.pin-beacon i{width:8px;height:8px;border-radius:50%;background:#fff;box-shadow:0 0 0 3px rgba(15,164,175,.85);transition:box-shadow .25s,transform .25s}
+.globe-pin:hover .pin-beacon i{transform:scale(1.25);box-shadow:0 0 0 5px rgba(15,164,175,1)}
+.pin-beacon i::after{content:"";position:absolute;inset:-11px;border-radius:50%;border:1px solid rgba(255,255,255,.8);animation:pulse 2.2s ease-out infinite}
+@keyframes pulse{from{transform:scale(.4);opacity:1}to{transform:scale(1.4);opacity:0}}
+.pin-label{padding:4px 10px;border-radius:12px;background:rgba(3,20,24,.84);border:1px solid rgba(255,255,255,.25);color:#e2f4f7;font-size:10px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;backdrop-filter:blur(6px);transition:all .2s;box-shadow:0 4px 14px rgba(0,0,0,.45)}
+.globe-pin:hover .pin-label{background:rgba(15,164,175,.95);color:#fff;border-color:rgba(255,255,255,.6);box-shadow:0 6px 20px rgba(15,164,175,.5)}
+.globe-pin.active .pin-beacon i{background:#fff;box-shadow:0 0 0 5px rgba(224,122,95,.95)}
+.globe-pin.active .pin-label{background:var(--coral);color:#fff;border-color:rgba(255,255,255,.8);font-weight:700;box-shadow:0 6px 20px rgba(224,122,95,.4)}
+.globe-pin.pin-hub .pin-beacon i{background:#ffd166;box-shadow:0 0 0 3.5px rgba(255,209,102,.85)}
+.globe-pin.pin-hub .pin-label{background:rgba(28,20,5,.88);border-color:rgba(255,209,102,.5);color:#ffe49e}
+
+#word1{left:50%;top:0;z-index:6;font-weight:800;font-size:clamp(30px,7.8vw,86px);letter-spacing:-.02em;line-height:1;color:rgba(255,255,255,.76);pointer-events:none;white-space:nowrap;max-width:92vw;text-align:center}
+
+#sites{right:6.2%;top:50%;z-index:7;list-style:none;display:grid;gap:clamp(26px,5.8vh,56px);transform:translateY(-50%)}
+#sites::before{content:"";position:absolute;right:5px;top:6px;bottom:6px;width:1px;background:rgba(255,255,255,.35)}
+#sites li{position:relative;text-align:right;padding-right:30px;cursor:pointer;font-weight:500;font-size:12px;letter-spacing:.08em;text-transform:uppercase;transition:font-size .3s,color .25s,transform .25s;color:rgba(255,255,255,.75)}
+#sites li:hover{color:#fff;transform:translateX(-3px)}
+#sites li::after{content:"";position:absolute;right:1px;top:50%;width:9px;height:9px;margin-top:-5px;border-radius:50%;background:#fff;transition:transform .3s,box-shadow .3s}
+#sites li.on{font-size:15px;color:#fff;font-weight:700}
+#sites li.on::after{transform:scale(1.55);box-shadow:0 0 0 7px rgba(15,164,175,.45)}
+
+#card{right:calc(6.2% + 204px);top:0;z-index:7;width:clamp(185px,16.5vw,270px);aspect-ratio:1.42;background-repeat:no-repeat;background-size:cover;background-position:center;border-radius:4px;box-shadow:0 24px 55px rgba(0,10,14,.7);overflow:visible;border:1px solid rgba(255,255,255,.18)}
+#card a{position:absolute;left:-26px;bottom:18%;background:var(--red);color:#fff;font-weight:600;font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;padding:10px 18px;border-radius:2px;box-shadow:0 8px 22px rgba(217,75,52,.45);transition:background .2s,transform .2s;white-space:nowrap}
+#card a:hover{background:#b83722;transform:scale(1.05)}
+
+#region{left:50%;top:50%;z-index:7;transform:translate(-50%,-50%);font-weight:600;font-size:clamp(24px,3.2vw,50px);letter-spacing:.06em;pointer-events:none;text-align:center;text-shadow:0 4px 20px rgba(0,0,0,.6);max-width:90vw}
+
+#land,#fore{inset:0;background-size:cover;background-repeat:no-repeat}
+#land{z-index:8;background-position:50% 50%;will-change:transform}
+#dest{left:0;right:0;top:0;z-index:9;text-align:center;pointer-events:none;padding:0 16px}
+#dest small{display:block;font-weight:400;font-size:clamp(12px,2.8vw,22px);line-height:1.2;letter-spacing:.1em;text-transform:uppercase;opacity:.92;color:#d2f0f4;max-width:92vw;margin:0 auto}
+#dest b{display:block;margin-top:.04em;font-weight:900;font-size:clamp(38px,8.4vw,105px);line-height:1;letter-spacing:-.03em;text-transform:uppercase;white-space:nowrap;color:#ffffff;text-shadow:0 6px 28px rgba(3,20,24,.75);max-width:94vw;margin-left:auto;margin-right:auto}
+#fore{z-index:10;background-position:50% 100%;will-change:transform;pointer-events:none}
+#fog{inset:0;z-index:11;pointer-events:none;background:radial-gradient(70% 64% at 50% 46%,#f0fbfc 0%,#d2f2f5 48%,#206c78 100%)}
+
+#scrim{left:0;right:0;top:0;height:160px;z-index:13;pointer-events:none;background:linear-gradient(rgba(2,16,20,.72),rgba(2,16,20,0))}
+#bar{left:50%;bottom:7.5vh;z-index:12;width:min(88vw,900px);display:grid;grid-template-columns:1fr 1fr 1fr 68px;background:#fff;color:#18282b;border-radius:4px;box-shadow:0 24px 60px rgba(2,14,18,.6)}
+#bar div{padding:14px 20px;border-right:1px solid #e2edea;min-width:0}
+#bar label{display:block;font-weight:600;font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:#7a9497;white-space:nowrap}
+#bar input{width:100%;margin-top:5px;border:0;outline:0;font:600 14px Montserrat,sans-serif;color:#18282b;background:none;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#bar button{background:var(--red);color:#fff;border-radius:0 4px 4px 0;font-size:22px;transition:background .25s;display:grid;place-items:center}
+#bar button:hover{background:#b83722}
+
+/* Header Chrome */
+header{left:0;right:0;top:0;z-index:20;display:flex;align-items:center;padding:clamp(16px,2.8vh,28px) clamp(18px,2.5vw,40px);font-size:11.5px;font-weight:500;letter-spacing:.06em;text-transform:uppercase;pointer-events:none}
+header>*{pointer-events:auto}
+.logo{display:flex;align-items:center;gap:12px;margin-right:auto;font-weight:800;font-size:19px;letter-spacing:-.01em;text-transform:none}
+.logo svg{width:34px;height:34px;flex-shrink:0}
+.logo-sub{font-weight:400;font-size:11px;letter-spacing:.18em;margin-left:4px;opacity:.8;display:inline-block;vertical-align:middle}
+.origin-pill{margin-left:clamp(12px,2vw,28px);padding:6px 14px;border-radius:20px;border:1px solid rgba(255,255,255,.25);font-size:10px;letter-spacing:.12em;opacity:.9;background:rgba(255,255,255,.05);backdrop-filter:blur(4px);white-space:nowrap}
+header a{margin-left:clamp(14px,2.4vw,36px);opacity:.9;transition:opacity .2s;white-space:nowrap}
+header a:hover{opacity:1}
+.ico{width:40px;height:40px;margin-left:clamp(12px,2.2vw,32px);border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.15);backdrop-filter:blur(6px);transition:background .25s;flex-shrink:0}
+.ico:hover{background:rgba(255,255,255,.3)}
+.ico svg,.srch svg{width:16px;height:16px;fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round}
+.srch{margin-left:clamp(14px,2.4vw,34px);cursor:pointer;display:grid;place-items:center}
+#rail{left:clamp(18px,2.4vw,38px);top:50%;z-index:20;display:grid;gap:15px;transform:translateY(-50%)}
+#rail button{width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,.45);transition:background .3s,transform .3s}
+#rail button.on{background:#fff;transform:scale(1.35);box-shadow:0 0 10px rgba(15,164,175,.8)}
+#hint{left:50%;bottom:3.8vh;transform:translateX(-50%);z-index:7;font-weight:400;font-size:11px;letter-spacing:.18em;text-transform:uppercase;opacity:.82;white-space:nowrap;color:#d2ecef}
+
+/* AERIVA Bespoke Booking & Itinerary Modal */
+.aeriva-modal{position:fixed;inset:0;z-index:100;background:rgba(2,16,20,.82);backdrop-filter:blur(10px);display:grid;place-items:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .3s ease}
+.aeriva-modal.open{opacity:1;pointer-events:auto}
+.aeriva-dialog{background:#fff;color:#18282b;width:min(90vw,560px);border-radius:4px;padding:36px;box-shadow:0 30px 80px rgba(0,0,0,.65);position:relative}
+.aeriva-dialog-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
+.aeriva-dialog-tag{font-size:10px;font-weight:700;letter-spacing:.18em;text-transform:uppercase;color:var(--red)}
+.aeriva-dialog-close{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;font-size:20px;color:#7a9497;transition:color .2s}
+.aeriva-dialog-close:hover{color:#000}
+.aeriva-dialog h2{font-size:28px;font-weight:900;letter-spacing:-.02em;line-height:1.15;margin-bottom:12px;color:#0e1d20}
+.aeriva-dialog h2 em{font-family:'Playfair Display',serif;font-weight:500;font-style:italic}
+.aeriva-dialog p{font-size:13.5px;line-height:1.6;color:#546e72;margin-bottom:24px}
+.aeriva-meta-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;background:#f3f9f8;border:1px solid #d9e9e6;padding:18px;border-radius:3px;margin-bottom:24px}
+.aeriva-meta-grid div span{display:block;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:#7a9598;margin-bottom:3px}
+.aeriva-meta-grid div strong{font-size:13px;font-weight:700;color:#102528}
+.aeriva-dialog-actions{display:flex;gap:12px}
+.aeriva-dialog-actions .btn-confirm{flex:1;background:var(--red);color:#fff;font-weight:600;font-size:12px;letter-spacing:.1em;text-transform:uppercase;padding:14px;border-radius:2px;transition:background .2s;text-align:center}
+.aeriva-dialog-actions .btn-confirm:hover{background:#b83722}
+.aeriva-dialog-actions .btn-copy{flex:1;background:#eef6f5;color:#18282b;font-weight:600;font-size:12px;letter-spacing:.1em;text-transform:uppercase;padding:14px;border-radius:2px;transition:background .2s}
+.aeriva-dialog-actions .btn-copy:hover{background:#dbebe8}
+
+/* Responsive Overrides (Mobile & Tablet) */
+@media (max-width:860px){
+  header a:not(.logo),.origin-pill{display:none}
+  #word0{font-size:clamp(36px,12.5vw,76px);letter-spacing:-.02em}
+  #eyebrow{font-size:11px}
+  #word1{font-size:clamp(26px,8.5vw,48px)}
+
+  /* Horizontal bottom selector for mobile to prevent overflow */
+  #sites{right:0;left:0;top:auto;bottom:12vh;transform:none;display:flex;justify-content:center;gap:10px;padding:0 12px;width:100vw;overflow-x:auto;-webkit-overflow-scrolling:touch}
+  #sites::before{display:none}
+  #sites li{padding:8px 14px;background:rgba(3,20,24,.75);border-radius:20px;border:1px solid rgba(255,255,255,.2);backdrop-filter:blur(6px);font-size:11px;white-space:nowrap}
+  #sites li small{display:none!important}
+  #sites li::after{display:none}
+  #sites li.on{background:var(--coral);border-color:rgba(255,255,255,.6);font-size:11px;transform:none}
+
+  #card{right:auto;left:50%;transform:translateX(-50%)!important;top:auto!important;bottom:18vh;width:min(68vw,240px)}
+  #card a{left:8px;bottom:8px;padding:8px 14px;font-size:9.5px}
+
+  #dest b{font-size:clamp(32px,10vw,64px)}
+  #dest small{font-size:clamp(11px,3.6vw,15px)}
+
+  #bar{grid-template-columns:1fr 1fr;width:calc(100vw - 28px);bottom:3vh}
+  #bar div:nth-child(2){border-right:0}
+  #bar div{padding:10px 14px;border-bottom:1px solid #e2edea}
+  #bar div:nth-child(3){grid-column:span 2}
+  #bar button{grid-column:span 2;height:46px;border-radius:0 0 4px 4px}
+
+  #hint,#rail{display:none}
+  #fore{background-size:220% auto}
+}
   </style>
 
   <script type="importmap">
@@ -1280,7 +151,6 @@
   }
   </script>
 </head>
-
 <body>
   <main class="hero" id="hero">
     <div id="word0">JOURNEYS</div>
@@ -1288,8 +158,7 @@
     <div id="flare"></div>
     <canvas id="gl"></canvas>
     <canvas id="dust"></canvas>
-    <div id="pin"><i></i><span>Maldives</span></div>
-
+    
     <!-- All destination points rendered simultaneously on the globe -->
     <div id="globePins"></div>
 
@@ -1313,9 +182,9 @@
     <header>
       <a class="logo" href="#" id="home" style="margin-left:0;opacity:1">
         <svg viewBox="0 0 36 36" fill="none" stroke="#fff" stroke-linecap="round">
-          <circle cx="18" cy="18" r="15.5" stroke-width="1.2" />
-          <path stroke-width="1.6" d="M7 23c5-2 9-7 13-15m-4 17c3-7 7-11 13-12M8 26c8-3 15-5 21-4" />
-          <circle cx="28" cy="12" r="2.2" fill="#fff" stroke="none" />
+          <circle cx="18" cy="18" r="15.5" stroke-width="1.2"/>
+          <path stroke-width="1.6" d="M7 23c5-2 9-7 13-15m-4 17c3-7 7-11 13-12M8 26c8-3 15-5 21-4"/>
+          <circle cx="28" cy="12" r="2.2" fill="#fff" stroke="none"/>
         </svg>
         <span>AERIVA <span class="logo-sub">JOURNEYS</span></span>
       </a>
@@ -1323,13 +192,8 @@
       <a href="#" id="navDestinations">Destinations</a>
       <a href="#" id="navApproach">Philosophy</a>
       <a href="#" id="navConcierge">Concierge</a>
-      <span class="srch"><svg viewBox="0 0 24 24">
-          <circle cx="10.500" cy="10.500" r="6.500" />
-          <path d="m15.500 15.500 5 5" />
-        </svg></span>
-      <button class="ico" id="menuBtn" aria-label="Menu"><svg viewBox="0 0 24 24">
-          <path d="M5 8h14M7 12h10M5 16h14" />
-        </svg></button>
+      <span class="srch"><svg viewBox="0 0 24 24"><circle cx="10.500" cy="10.500" r="6.500"/><path d="m15.500 15.500 5 5"/></svg></span>
+      <button class="ico" id="menuBtn" aria-label="Menu"><svg viewBox="0 0 24 24"><path d="M5 8h14M7 12h10M5 16h14"/></svg></button>
     </header>
 
     <div id="rail">
@@ -1338,7 +202,6 @@
       <button aria-label="The Arrival"></button>
     </div>
 
-    <div id="hint">Drag the globe to explore · click to select escape</div>
     <div id="hint">Scroll to tour escapes · click point on globe to land</div>
 
     <!-- AERIVA Bespoke Journey Reservation Modal -->
@@ -1349,8 +212,7 @@
           <button class="aeriva-dialog-close" id="closeModal" type="button" aria-label="Close dialog">✕</button>
         </div>
         <h2 id="modalTitle">Plan Your Escape to <em id="modalDest">Maldives</em></h2>
-        <p id="modalDesc">Your seamless departure is planned directly from Hyderabad International Airport (HYD) to
-          private island sanctuaries and curated retreats.</p>
+        <p id="modalDesc">Your seamless departure is planned directly from Hyderabad International Airport (HYD) to private island sanctuaries and curated retreats.</p>
         <div class="aeriva-meta-grid">
           <div>
             <span>Departure Point</span>
@@ -1428,7 +290,6 @@
       }
     ];
 
-    // Regional focus for Indian Ocean / Asia
     // Origin departure hub (Hyderabad)
     const HUB_POINT = {
       name: 'Hyderabad (HYD)',
@@ -1458,8 +319,6 @@
       return x + (y - x) * a;
     }
 
-    // Direction matching SphereGeometry UV convention:
-    // u: 0..1 around Y axis, v: 0..1 from north pole to south pole
     // Direction matching SphereGeometry UV convention
     function getDir(u, v) {
       const ph = 2 * Math.PI * u;
@@ -1484,8 +343,6 @@
     const flare = document.getElementById('flare');
     const glCanvas = document.getElementById('gl');
     const dustCanvas = document.getElementById('dust');
-    const pin = document.getElementById('pin');
-    const pinSpan = pin.querySelector('span');
     const globePinsWrap = document.getElementById('globePins');
     const word1 = document.getElementById('word1');
     const sitesUl = document.getElementById('sites');
@@ -1515,7 +372,6 @@
     const d1Input = document.getElementById('d1');
     const d3Input = document.getElementById('d3');
 
-    // Preload destination background images
     // Preload destination backgrounds
     SITES.forEach((s) => {
       new Image().src = s.image;
@@ -1526,7 +382,6 @@
     // Viewport & layout dimensions
     let W = window.innerWidth;
     let H = window.innerHeight;
-    let portrait = H > W * 1.05;
     let portrait = H > W * 1.02;
     let R0 = portrait ? W * 0.36 : Math.min(H * 0.3, W * 0.19);
 
@@ -1624,7 +479,6 @@
 
         void main(){
           vec3 col = texture2D(map, vUv).rgb;
-          // Rich atmospheric contrast & lush ocean blues
           col = pow(col, vec3(1.15)) * vec3(1.02, 1.05, 1.08);
 
           // Topographic relief derived from land elevation
@@ -1666,7 +520,6 @@
     const sphereMesh = new THREE.Mesh(sphereGeo, sphereMat);
     spin.add(sphereMesh);
 
-    // Ethereal Earth Atmosphere Halo (attached to planet, not spun)
     // Ethereal Earth Atmosphere Halo
     const atmoGeo = new THREE.SphereGeometry(1.12, 64, 48);
     const atmoMat = new THREE.ShaderMaterial({
@@ -1708,7 +561,6 @@
     earthImage.crossOrigin = 'anonymous';
     earthImage.src = EARTH_MAP_URL;
     earthImage.onerror = () => {
-      // Local fallback if CDN is offline
       earthImage.src = './media/earth-day-2k.jpg';
     };
     earthImage.onload = () => {
@@ -1784,620 +636,585 @@
     let mouseX = 0;
     let mouseY = 0;
 
-    // Destination selector
-    function pick(i) {
-      // Build Interactive Pins for all destinations + Hyderabad hub
-      const ALL_POINTS = [
-        ...SITES.map((site, i) => ({ ...site, siteIndex: i })),
-        HUB_POINT
-      ];
+    // Build Interactive Pins for all destinations + Hyderabad hub
+    const ALL_POINTS = [
+      ...SITES.map((site, i) => ({ ...site, siteIndex: i })),
+      HUB_POINT
+    ];
 
-      globePinsWrap.innerHTML = '';
-      const pinElements = ALL_POINTS.map((pt, i) => {
-        const pinEl = document.createElement('div');
-        pinEl.className = `globe-pin ${pt.isHub ? 'pin-hub' : ''} ${pt.siteIndex === 0 ? 'active' : ''}`;
-        pinEl.dataset.idx = i;
-        pinEl.innerHTML = `
+    globePinsWrap.innerHTML = '';
+    const pinElements = ALL_POINTS.map((pt, i) => {
+      const pinEl = document.createElement('div');
+      pinEl.className = `globe-pin ${pt.isHub ? 'pin-hub' : ''} ${pt.siteIndex === 0 ? 'active' : ''}`;
+      pinEl.dataset.idx = i;
+      pinEl.innerHTML = `
         <div class="pin-beacon"><i></i></div>
         <span class="pin-label">${pt.name}</span>
       `;
 
-        pinEl.addEventListener('click', (e) => {
-          e.stopPropagation();
-          if (pt.isHub) {
-            // If clicked Hyderabad origin hub, tour to first escape
-            pick(0);
-            if (to === 0) go(1);
-            return;
-          }
+      pinEl.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (pt.isHub) {
+          // If clicked Hyderabad origin hub, tour to first escape
+          pick(0);
+          if (to === 0) go(1);
+          return;
+        }
 
-          // On clicking any destination point on the globe:
-          // 1. Select that destination
-          // 2. Dive directly into that destination in the arrival frame!
-          pick(pt.siteIndex);
-          go(2);
-        });
-
-        pinEl.addEventListener('mouseenter', () => {
-          if (!pt.isHub) {
-            pick(pt.siteIndex, false); // select without forcing arrival
-          }
-        });
-
-        globePinsWrap.appendChild(pinEl);
-        return pinEl;
+        // On clicking any destination point on the globe:
+        // 1. Select that destination
+        // 2. Dive directly into that destination in the arrival frame!
+        pick(pt.siteIndex);
+        go(2);
       });
 
-      // Destination selector implementation
-      function pick(i, animateCamera = true) {
-        curSite = i;
-        const site = SITES[i];
-        if (!site) return;
-
-        // Update timeline items
-        const lis = sitesUl.querySelectorAll('li');
-        lis.forEach((li, idx) => {
-          if (idx === i) li.classList.add('on');
-          else li.classList.remove('on');
-        });
-
-        // Update active pin classes
-        pinElements.forEach((el, idx) => {
-          const pt = ALL_POINTS[idx];
-          if (!pt.isHub && pt.siteIndex === i) {
-            el.classList.add('active');
-          } else {
-            el.classList.remove('active');
-          }
-        });
-
-        card.style.backgroundImage = `url("${site.card}")`;
-
-        const activeLi = lis[i];
-        if (activeLi && window.innerWidth > 760) {
-          if (activeLi && window.innerWidth > 860) {
-            const liRect = activeLi.getBoundingClientRect();
-            const heroRect = heroEl.getBoundingClientRect();
-            const topPx = (liRect.top - heroRect.top) + liRect.height / 2 - card.offsetHeight / 2;
-            card.style.top = `${topPx}px`;
-          }
-
-          destName.textContent = site.name;
-          if (destRegion) destRegion.textContent = site.region;
-          regionEl.textContent = site.name.toUpperCase();
-          pinSpan.textContent = site.name;
-
-          // Update landing background
-          // Update landing backdrop dynamically
-          land.style.backgroundImage = `url("${site.image}")`;
-
-          // Update modal metadata
-          if (modalDest) modalDest.textContent = site.name;
-          if (modalDesc) modalDesc.textContent = site.description;
-          if (modalRegion) modalRegion.textContent = `${site.region} · ${site.tagline}`;
+      pinEl.addEventListener('mouseenter', () => {
+        if (!pt.isHub) {
+          pick(pt.siteIndex, false); // select without forcing arrival
         }
+      });
 
-        // Populate sites timeline
-        sitesUl.innerHTML = '';
-        SITES.forEach((site, i) => {
-          const li = document.createElement('li');
-          li.dataset.i = i;
-          li.innerHTML = `<span>${site.name}</span> <small style="display:block;font-size:9.5px;opacity:0.65;text-transform:none;letter-spacing:0">${site.tagline.split('&')[0]}</small>`;
-          li.addEventListener('mouseenter', () => pick(i));
-          li.addEventListener('click', () => {
-            pick(i);
-            go(2);
-          });
-          sitesUl.appendChild(li);
-        });
-        pick(0);
+      globePinsWrap.appendChild(pinEl);
+      return pinEl;
+    });
 
-        // Navigation triggers
-        exploreBtn.addEventListener('click', (e) => {
-          e.preventDefault();
-          go(2);
-        });
-        homeBtn.addEventListener('click', (e) => {
-          e.preventDefault();
-          go(0);
-        });
-        railButtons.forEach((btn, idx) => {
-          btn.addEventListener('click', () => go(idx));
-        });
+    // Destination selector implementation
+    function pick(i, animateCamera = true) {
+      curSite = i;
+      const site = SITES[i];
+      if (!site) return;
 
-        // Modal dialogue triggers
-        // Modal dialog triggers
-        function openModal() {
-          const site = SITES[curSite];
-          if (modalDest) modalDest.textContent = site.name;
-          if (modalDesc) modalDesc.textContent = site.description;
-          if (modalRegion) modalRegion.textContent = `${site.region} · ${site.tagline}`;
-          if (modalDate && d1Input) modalDate.textContent = `${d1Input.value || '18 Nov 2026'} · 8 Nights`;
-          if (modalPass && d3Input) modalPass.textContent = d3Input.value || '2 adults · Luxury Sanctuary';
-          modalEl.classList.add('open');
+      // Update timeline items
+      const lis = sitesUl.querySelectorAll('li');
+      lis.forEach((li, idx) => {
+        if (idx === i) li.classList.add('on');
+        else li.classList.remove('on');
+      });
+
+      // Update active pin classes
+      pinElements.forEach((el, idx) => {
+        const pt = ALL_POINTS[idx];
+        if (!pt.isHub && pt.siteIndex === i) {
+          el.classList.add('active');
+        } else {
+          el.classList.remove('active');
         }
-        function closeModal() {
-          modalEl.classList.remove('open');
+      });
+
+      card.style.backgroundImage = `url("${site.card}")`;
+
+      const activeLi = lis[i];
+      if (activeLi && window.innerWidth > 860) {
+        const liRect = activeLi.getBoundingClientRect();
+        const heroRect = heroEl.getBoundingClientRect();
+        const topPx = (liRect.top - heroRect.top) + liRect.height / 2 - card.offsetHeight / 2;
+        card.style.top = `${topPx}px`;
+      }
+
+      destName.textContent = site.name;
+      if (destRegion) destRegion.textContent = site.region;
+      regionEl.textContent = site.name.toUpperCase();
+
+      // Update landing backdrop dynamically
+      land.style.backgroundImage = `url("${site.image}")`;
+
+      // Update modal metadata
+      if (modalDest) modalDest.textContent = site.name;
+      if (modalDesc) modalDesc.textContent = site.description;
+      if (modalRegion) modalRegion.textContent = `${site.region} · ${site.tagline}`;
+    }
+
+    // Populate sites timeline
+    sitesUl.innerHTML = '';
+    SITES.forEach((site, i) => {
+      const li = document.createElement('li');
+      li.dataset.i = i;
+      li.innerHTML = `<span>${site.name}</span> <small style="display:block;font-size:9.5px;opacity:0.65;text-transform:none;letter-spacing:0">${site.tagline.split('&')[0]}</small>`;
+      li.addEventListener('mouseenter', () => pick(i));
+      li.addEventListener('click', () => {
+        pick(i);
+        go(2);
+      });
+      sitesUl.appendChild(li);
+    });
+    pick(0);
+
+    // Navigation triggers
+    exploreBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      go(2);
+    });
+    homeBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      go(0);
+    });
+    railButtons.forEach((btn, idx) => {
+      btn.addEventListener('click', () => go(idx));
+    });
+
+    // Modal dialog triggers
+    function openModal() {
+      const site = SITES[curSite];
+      if (modalDest) modalDest.textContent = site.name;
+      if (modalDesc) modalDesc.textContent = site.description;
+      if (modalRegion) modalRegion.textContent = `${site.region} · ${site.tagline}`;
+      if (modalDate && d1Input) modalDate.textContent = `${d1Input.value || '18 Nov 2026'} · 8 Nights`;
+      if (modalPass && d3Input) modalPass.textContent = d3Input.value || '2 adults · Luxury Sanctuary';
+      modalEl.classList.add('open');
+    }
+    function closeModal() {
+      modalEl.classList.remove('open');
+    }
+    document.getElementById('searchSeats').addEventListener('click', openModal);
+    closeModalBtn.addEventListener('click', closeModal);
+    modalEl.addEventListener('click', (e) => {
+      if (e.target === modalEl) closeModal();
+    });
+
+    // Build prepared enquiry text matching AERIVA Journeys WhatsApp concierge
+    function getPreparedEnquiry() {
+      const site = SITES[curSite];
+      return `Hello AERIVA Journeys,\n\nI am interested in planning a curated escape to ${site.name} (${site.region}).\nDeparture: Hyderabad (HYD)\nDates: ${d1Input.value || 'Nov 2026'}\nTravelers: ${d3Input.value || '2 adults'}\nStyle: Relaxed Luxury Sanctuary\n\nPlease share availability and curated itinerary options.`;
+    }
+
+    confirmEnquiryBtn.addEventListener('click', () => {
+      const text = encodeURIComponent(getPreparedEnquiry());
+      window.open(`https://wa.me/?text=${text}`, '_blank');
+      closeModal();
+    });
+
+    copyEnquiryBtn.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(getPreparedEnquiry());
+        copyEnquiryBtn.textContent = 'Enquiry Copied! ✓';
+        setTimeout(() => { copyEnquiryBtn.textContent = 'Copy Itinerary Enquiry'; }, 2500);
+      } catch {
+        alert('Enquiry copied to clipboard.');
+      }
+    });
+
+    // Pointer events on Earth Canvas
+    glCanvas.addEventListener('pointerdown', (e) => {
+      if (st >= 1.02) return;
+      isDragging = true;
+      dragStartX = dragLastX = e.clientX;
+      dragStartY = dragLastY = e.clientY;
+      movedTotal = 0;
+      glCanvas.classList.add('drag');
+      glCanvas.setPointerCapture(e.pointerId);
+    });
+
+    glCanvas.addEventListener('pointermove', (e) => {
+      if (!isDragging) return;
+      const dx = e.clientX - dragLastX;
+      const dy = e.clientY - dragLastY;
+      movedTotal += Math.hypot(dx, dy);
+
+      const k = 1.1 / R0;
+      yaw += dx * k;
+      pitch = clamp(pitch + dy * k, -1, 1);
+      vy = dx * k * 0.25;
+
+      dragLastX = e.clientX;
+      dragLastY = e.clientY;
+      lastDragTime = performance.now();
+    });
+
+    const onPointerUp = (e) => {
+      if (!isDragging) return;
+      isDragging = false;
+      glCanvas.classList.remove('drag');
+      lastDragTime = performance.now();
+      if (glCanvas.hasPointerCapture(e.pointerId)) {
+        glCanvas.releasePointerCapture(e.pointerId);
+      }
+
+      // Earth click check: moved < 6px, inside radius R, advances
+      if (movedTotal < 6 && to < 2) {
+        const distFromCenter = Math.hypot(e.clientX - curPlanetCx, e.clientY - curPlanetCy);
+        if (distFromCenter <= curPlanetR * 1.06) {
+          go(to + 1);
         }
-        document.getElementById('searchSeats').addEventListener('click', openModal);
-        closeModalBtn.addEventListener('click', closeModal);
-        modalEl.addEventListener('click', (e) => {
-          if (e.target === modalEl) closeModal();
-        });
+      }
+    };
+    glCanvas.addEventListener('pointerup', onPointerUp);
+    glCanvas.addEventListener('pointercancel', onPointerUp);
 
-        // Build enquiry text matching AERIVA Journeys WhatsApp format
-        // Build prepared enquiry text matching AERIVA Journeys WhatsApp concierge
-        function getPreparedEnquiry() {
-          const site = SITES[curSite];
-          return `Hello AERIVA Journeys,\n\nI am interested in planning a curated escape to ${site.name} (${site.region}).\nDeparture: Hyderabad (HYD)\nDates: ${d1Input.value || 'Nov 2026'}\nTravelers: ${d3Input.value || '2 adults'}\nStyle: Relaxed Luxury Sanctuary\n\nPlease share availability and curated itinerary options.`;
-        }
+    // Global mouse tracking for multi-plane parallax
+    window.addEventListener('pointermove', (e) => {
+      pointerX = e.clientX;
+      pointerY = e.clientY;
+      mouseX = pointerX / W - 0.5;
+      mouseY = pointerY / H - 0.5;
+    });
 
-        confirmEnquiryBtn.addEventListener('click', () => {
-          const text = encodeURIComponent(getPreparedEnquiry());
-          window.open(`https://wa.me/?text=${text}`, '_blank');
-          closeModal();
-        });
+    // SCROLL-DRIVEN DESTINATION WALKTHROUGH
+    // In Stage 1, scrolling walks through each destination (Maldives -> Bali -> Singapore -> Seychelles)
+    // Scrolling past the last destination advances to Stage 2 (Arrival)!
+    let lastWheelTime = 0;
+    function handleWheelNavigation(deltaY) {
+      const now = performance.now();
+      if (now - lastWheelTime < 620) return;
 
-        copyEnquiryBtn.addEventListener('click', async () => {
-          try {
-            await navigator.clipboard.writeText(getPreparedEnquiry());
-            copyEnquiryBtn.textContent = 'Enquiry Copied! ✓';
-            setTimeout(() => { copyEnquiryBtn.textContent = 'Copy Itinerary Enquiry'; }, 2500);
-          } catch {
-            alert('Enquiry copied to clipboard.');
-          }
-        });
-
-        // Pointer events on Earth Canvas
-        glCanvas.addEventListener('pointerdown', (e) => {
-          if (st >= 1.02) return;
-          isDragging = true;
-          dragStartX = dragLastX = e.clientX;
-          dragStartY = dragLastY = e.clientY;
-          movedTotal = 0;
-          glCanvas.classList.add('drag');
-          glCanvas.setPointerCapture(e.pointerId);
-        });
-
-        glCanvas.addEventListener('pointermove', (e) => {
-          if (!isDragging) return;
-          const dx = e.clientX - dragLastX;
-          const dy = e.clientY - dragLastY;
-          movedTotal += Math.hypot(dx, dy);
-
-          const k = 1.1 / R0;
-          yaw += dx * k;
-          pitch = clamp(pitch + dy * k, -1, 1);
-          vy = dx * k * 0.25;
-
-          dragLastX = e.clientX;
-          dragLastY = e.clientY;
-          lastDragTime = performance.now();
-        });
-
-        const onPointerUp = (e) => {
-          if (!isDragging) return;
-          isDragging = false;
-          glCanvas.classList.remove('drag');
-          lastDragTime = performance.now();
-          if (glCanvas.hasPointerCapture(e.pointerId)) {
-            glCanvas.releasePointerCapture(e.pointerId);
-          }
-
-          // Earth click check: moved < 6px, inside radius R, to < 2 advances
-          // Earth click check: moved < 6px, inside radius R, advances
-          if (movedTotal < 6 && to < 2) {
-            const distFromCenter = Math.hypot(e.clientX - curPlanetCx, e.clientY - curPlanetCy);
-            if (distFromCenter <= curPlanetR * 1.06) {
-              go(to + 1);
+      if (Math.abs(deltaY) > 6) {
+        if (deltaY > 0) {
+          // Scroll DOWN (Forward in journey)
+          if (to === 0) {
+            // Stage 0 -> Stage 1 at first destination
+            go(1);
+            lastWheelTime = now;
+          } else if (to === 1) {
+            // In Stage 1: walk through destinations one by one
+            if (curSite < SITES.length - 1) {
+              pick(curSite + 1);
+              lastWheelTime = now;
+            } else {
+              // Reached last destination -> advance to Stage 2 (Arrival)
+              go(2);
+              lastWheelTime = now;
             }
           }
-        };
-        glCanvas.addEventListener('pointerup', onPointerUp);
-        glCanvas.addEventListener('pointercancel', onPointerUp);
+        } else {
+          // Scroll UP (Backward in journey)
+          if (to === 2) {
+            // Stage 2 -> Return to Stage 1 at active destination
+            go(1);
+            lastWheelTime = now;
+          } else if (to === 1) {
+            // In Stage 1: walk backward through destinations
+            if (curSite > 0) {
+              pick(curSite - 1);
+              lastWheelTime = now;
+            } else {
+              // At first destination -> return to Stage 0 (The World)
+              go(0);
+              lastWheelTime = now;
+            }
+          }
+        }
+      }
+    }
 
-        // Global mouse tracking for multi-plane parallax
-        window.addEventListener('pointermove', (e) => {
-          pointerX = e.clientX;
-          pointerY = e.clientY;
-          mouseX = pointerX / W - 0.5;
-          mouseY = pointerY / H - 0.5;
-        });
+    window.addEventListener('wheel', (e) => {
+      handleWheelNavigation(e.deltaY);
+    }, { passive: true });
 
-        // Wheel trigger: deltaY beyond ±8 steps to ±1 (locked 1400ms)
-        // SCROLL-DRIVEN DESTINATION WALKTHROUGH
-        // In Stage 1, scrolling walks through each destination (Maldives -> Bali -> Singapore -> Seychelles)
-        // Scrolling past the last destination advances to Stage 2 (Arrival)!
-        let lastWheelTime = 0;
-        window.addEventListener('wheel', (e) => {
-          function handleWheelNavigation(deltaY) {
-            const now = performance.now();
-            if (now - lastWheelTime < 1400) return;
-            if (Math.abs(e.deltaY) > 8) {
-              if (e.deltaY > 0) {
-                if (to < 2) {
-                  go(to + 1);
-                  if (now - lastWheelTime < 620) return;
+    // Touch swipe support for mobile walk-through
+    let touchStartY = 0;
+    window.addEventListener('touchstart', (e) => {
+      touchStartY = e.touches[0].clientY;
+    }, { passive: true });
+    window.addEventListener('touchend', (e) => {
+      const dy = touchStartY - e.changedTouches[0].clientY;
+      if (Math.abs(dy) > 40) {
+        handleWheelNavigation(dy > 0 ? 20 : -20);
+      }
+    }, { passive: true });
 
-                  if (Math.abs(deltaY) > 6) {
-                    if (deltaY > 0) {
-                      // Scroll DOWN (Forward in journey)
-                      if (to === 0) {
-                        // Stage 0 -> Stage 1 at first destination
-                        go(1);
-                        lastWheelTime = now;
-                      } else if (to === 1) {
-                        // In Stage 1: walk through destinations one by one
-                        if (curSite < SITES.length - 1) {
-                          pick(curSite + 1);
-                          lastWheelTime = now;
-                        } else {
-                          // Reached last destination -> advance to Stage 2 (Arrival)
-                          go(2);
-                          lastWheelTime = now;
-                        }
-                      }
-                    } else {
-                      if (to > 0) {
-                        go(to - 1);
-                        // Scroll UP (Backward in journey)
-                        if (to === 2) {
-                          // Stage 2 -> Return to Stage 1 at active destination
-                          go(1);
-                          lastWheelTime = now;
-                        } else if (to === 1) {
-                          // In Stage 1: walk backward through destinations
-                          if (curSite > 0) {
-                            pick(curSite - 1);
-                            lastWheelTime = now;
-                          } else {
-                            // At first destination -> return to Stage 0 (The World)
-                            go(0);
-                            lastWheelTime = now;
-                          }
-                        }
-                      }
-                    }
-                  }
+    // Escape steps back or closes modal
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        if (modalEl.classList.contains('open')) {
+          closeModal();
+          return;
+        }
+        if (to > 0) go(to - 1);
+      }
+    });
 
-                  window.addEventListener('wheel', (e) => {
-                    handleWheelNavigation(e.deltaY);
-                  }, { passive: true });
+    // 8. Dust & Starlight Mote Canvas
+    const dustCtx = dustCanvas.getContext('2d');
+    const dustDpr = Math.min(window.devicePixelRatio || 1, 1.5);
 
-                  // Touch swipe support for mobile walk-through
-                  let touchStartY = 0;
-                  window.addEventListener('touchstart', (e) => {
-                    touchStartY = e.touches[0].clientY;
-                  }, { passive: true });
-                  window.addEventListener('touchend', (e) => {
-                    const dy = touchStartY - e.changedTouches[0].clientY;
-                    if (Math.abs(dy) > 40) {
-                      handleWheelNavigation(dy > 0 ? 20 : -20);
-                    }
-                  }, { passive: true });
+    // Pre-render 64px radial celestial dust sprite
+    const dustSprite = document.createElement('canvas');
+    dustSprite.width = 64;
+    dustSprite.height = 64;
+    const sCtx = dustSprite.getContext('2d');
+    const sGrad = sCtx.createRadialGradient(32, 32, 0, 32, 32, 32);
+    sGrad.addColorStop(0, 'rgba(230,250,255,0.95)');
+    sGrad.addColorStop(0.4, 'rgba(120,215,240,0.42)');
+    sGrad.addColorStop(1, 'rgba(120,215,240,0)');
+    sCtx.fillStyle = sGrad;
+    sCtx.fillRect(0, 0, 64, 64);
 
-                  // Escape steps back or closes modal
-                  window.addEventListener('keydown', (e) => {
-                    if (e.key === 'Escape') {
-                      if (modalEl.classList.contains('open')) {
-                        closeModal();
-                        return;
-                      }
-                      if (to > 0) go(to - 1);
-                    }
-                  });
+    // Seeded random for 34 motes
+    function seededRng(seed) {
+      let s = seed % 2147483647;
+      if (s <= 0) s += 2147483646;
+      return () => (s = (s * 16807) % 2147483647) / 2147483647;
+    }
+    const rng = seededRng(2048);
+    const motes = [];
+    for (let i = 0; i < 34; i++) {
+      const rndR = rng();
+      motes.push({
+        x: rng(),
+        y: rng(),
+        r: 3 + rndR * rndR * 34,
+        s: 0.004 + rng() * 0.012,
+        p: rng() * 6.28
+      });
+    }
 
-                  // 8. Dust & Starlight Mote Canvas
-                  const dustCtx = dustCanvas.getContext('2d');
-                  const dustDpr = Math.min(window.devicePixelRatio || 1, 1.5);
+    // Viewport Resize Handler
+    function onResize() {
+      W = window.innerWidth;
+      H = window.innerHeight;
+      portrait = H > W * 1.02;
+      R0 = portrait ? W * 0.36 : Math.min(H * 0.3, W * 0.19);
 
-                  // Pre-render 64px radial celestial dust sprite
-                  const dustSprite = document.createElement('canvas');
-                  dustSprite.width = 64;
-                  dustSprite.height = 64;
-                  const sCtx = dustSprite.getContext('2d');
-                  const sGrad = sCtx.createRadialGradient(32, 32, 0, 32, 32, 32);
-                  sGrad.addColorStop(0, 'rgba(230,250,255,0.95)');
-                  sGrad.addColorStop(0.4, 'rgba(120,215,240,0.42)');
-                  sGrad.addColorStop(1, 'rgba(120,215,240,0)');
-                  sCtx.fillStyle = sGrad;
-                  sCtx.fillRect(0, 0, 64, 64);
+      camera.left = -W / 2;
+      camera.right = W / 2;
+      camera.top = H / 2;
+      camera.bottom = -H / 2;
+      camera.updateProjectionMatrix();
 
-                  // Seeded random for 34 motes
-                  function seededRng(seed) {
-                    let s = seed % 2147483647;
-                    if (s <= 0) s += 2147483646;
-                    return () => (s = (s * 16807) % 2147483647) / 2147483647;
-                  }
-                  const rng = seededRng(2048);
-                  const motes = [];
-                  for (let i = 0; i < 34; i++) {
-                    const rndR = rng();
-                    motes.push({
-                      x: rng(),
-                      y: rng(),
-                      r: 3 + rndR * rndR * 34,
-                      s: 0.004 + rng() * 0.012,
-                      p: rng() * 6.28
-                    });
-                  }
+      renderer.setSize(W, H);
 
-                  // Viewport Resize Handler
-                  function onResize() {
-                    W = window.innerWidth;
-                    H = window.innerHeight;
-                    portrait = H > W * 1.05;
-                    portrait = H > W * 1.02;
-                    R0 = portrait ? W * 0.36 : Math.min(H * 0.3, W * 0.19);
+      dustCanvas.width = W * dustDpr;
+      dustCanvas.height = H * dustDpr;
+      dustCtx.setTransform(dustDpr, 0, 0, dustDpr, 0, 0);
 
-                    camera.left = -W / 2;
-                    camera.right = W / 2;
-                    camera.top = H / 2;
-                    camera.bottom = -H / 2;
-                    camera.updateProjectionMatrix();
+      pick(curSite);
+    }
+    window.addEventListener('resize', onResize);
+    onResize();
 
-                    renderer.setSize(W, H);
+    let curPlanetCx = W * 0.5;
+    let curPlanetCy = H * 0.5;
+    let curPlanetR = R0;
 
-                    dustCanvas.width = W * dustDpr;
-                    dustCanvas.height = H * dustDpr;
-                    dustCtx.setTransform(dustDpr, 0, 0, dustDpr, 0, 0);
+    // 7. Render Loop: Continuous 60fps single-state computation
+    let lastTime = performance.now();
 
-                    pick(curSite);
-                  }
-                  window.addEventListener('resize', onResize);
-                  onResize();
+    function render(now) {
+      const dt = Math.min((now - lastTime) / 1000, 0.05);
+      lastTime = now;
+      const t = now * 0.001;
 
-                  let curPlanetCx = W * 0.5;
-                  let curPlanetCy = H * 0.5;
-                  let curPlanetR = R0;
+      // Single-state float st (0..2)
+      const progress = dur <= 1 ? 1 : seg(now, t0, t0 + dur);
+      st = mix(from, to, io(progress));
+      const a = clamp(st, 0, 1);
+      const b = clamp(st - 1, 0, 1);
 
-                  // 7. Render Loop: Continuous 60fps single-state computation
-                  let lastTime = performance.now();
+      // Intro timing
+      const age = (now - mapLoadTime) / 1000;
+      const grow = out(seg(age, 0, 1.5));
+      const iw = out(seg(age, 0.75, 1.7));
 
-                  function render(now) {
-                    const dt = Math.min((now - lastTime) / 1000, 0.05);
-                    lastTime = now;
-                    const t = now * 0.001;
+      // Earth coordinates and scale
+      const bz = io(seg(b, 0, 0.62));
+      const px = portrait ? 0.5 * W : mix(0.5 * W, 0.36 * W, a);
+      const py = portrait ? mix(0.4 * H, 0.33 * H, a) : 0.5 * H;
+      const R = R0 * mix(0.03, 1, grow) * (1 + a * 0.04) * Math.exp(bz * 2.5);
+      const cx = mix(px, 0.5 * W, bz);
+      const cy = mix(py, 0.5 * H, bz);
 
-                    // Single-state float st (0..2)
-                    const progress = dur <= 1 ? 1 : seg(now, t0, t0 + dur);
-                    st = mix(from, to, io(progress));
-                    const a = clamp(st, 0, 1);
-                    const b = clamp(st - 1, 0, 1);
+      curPlanetCx = cx;
+      curPlanetCy = cy;
+      curPlanetR = R;
 
-                    // Intro timing
-                    const age = (now - mapLoadTime) / 1000;
-                    const grow = out(seg(age, 0, 1.5));
-                    const iw = out(seg(age, 0.75, 1.7));
+      planet.scale.setScalar(R);
+      planet.position.set(cx - W / 2, H / 2 - cy, 0);
 
-                    // Earth coordinates and scale
-                    const bz = io(seg(b, 0, 0.62));
-                    const px = portrait ? 0.5 * W : mix(0.5 * W, 0.36 * W, a);
-                    const py = portrait ? mix(0.4 * H, 0.33 * H, a) : 0.5 * H;
-                    const R = R0 * mix(0.03, 1, grow) * (1 + a * 0.04) * Math.exp(bz * 2.5);
-                    const cx = mix(px, 0.5 * W, bz);
-                    const cy = mix(py, 0.5 * H, bz);
+      // Rotation & target orientation
+      const timeSinceDrag = (now - lastDragTime) / 1000;
+      if (st < 0.02 && !isDragging) {
+        if (timeSinceDrag > 1.5) {
+          yaw += dt * (0.08 + (1 - grow) * 2.4);
+        }
+        yaw += vy;
+        vy *= Math.exp(-dt * 4);
+        pitch += (0.16 - pitch) * (1 - Math.exp(-dt * 1.2));
+      } else if (st > 0.02) {
+        // Target: Curated Site if b > 0, else Regional Focus
+        const targetPt = (b > 0) ? SITES[curSite] : PRIMARY_REGION;
+        const targetD = getDir(targetPt.u, targetPt.v);
+        const targetYaw = Math.atan2(-targetD.x, targetD.z);
+        const targetLat = Math.asin(clamp(targetD.y, -1, 1));
 
-                    curPlanetCx = cx;
-                    curPlanetCy = cy;
-                    curPlanetR = R;
+        // Shortest arc yaw ease at rate 3.6
+        let dyaw = ((targetYaw - yaw) % (2 * Math.PI) + 3 * Math.PI) % (2 * Math.PI) - Math.PI;
+        yaw += dyaw * (1 - Math.exp(-dt * 3.6));
+        pitch += (targetLat - pitch) * (1 - Math.exp(-dt * 3.6));
+      }
 
-                    planet.scale.setScalar(R);
-                    planet.position.set(cx - W / 2, H / 2 - cy, 0);
+      tilt.rotation.x = pitch;
+      spin.rotation.y = yaw;
 
-                    // Rotation & target orientation
-                    const timeSinceDrag = (now - lastDragTime) / 1000;
-                    if (st < 0.02 && !isDragging) {
-                      if (timeSinceDrag > 1.5) {
-                        yaw += dt * (0.08 + (1 - grow) * 2.4);
-                      }
-                      yaw += vy;
-                      vy *= Math.exp(-dt * 4);
-                      pitch += (0.16 - pitch) * (1 - Math.exp(-dt * 1.2));
-                    } else if (st > 0.02) {
-                      // Target: Curated Site if b > 0, else Regional Focus (Indian Ocean / Asia)
-                      // Target: Curated Site if b > 0, else Regional Focus
-                      const targetPt = (b > 0) ? SITES[curSite] : PRIMARY_REGION;
-                      const targetD = getDir(targetPt.u, targetPt.v);
-                      const targetYaw = Math.atan2(-targetD.x, targetD.z);
-                      const targetLat = Math.asin(clamp(targetD.y, -1, 1));
+      // Navigational territory highlight
+      const hiPt = (b > 0.02) ? SITES[curSite] : PRIMARY_REGION;
+      const hiDirVec = getDir(hiPt.u, hiPt.v);
+      sphereMat.uniforms.hiDir.value.copy(hiDirVec);
+      sphereMat.uniforms.hiR.value = (b > 0.02) ? mix(0.55, 0.28, seg(b, 0, 0.1)) : 0.55;
+      sphereMat.uniforms.hi.value = clamp(seg(a, 0.15, 0.6) + (b > 0 ? 1 : 0));
 
-                      // Shortest arc yaw ease at rate 3.6
-                      let dyaw = ((targetYaw - yaw) % (2 * Math.PI) + 3 * Math.PI) % (2 * Math.PI) - Math.PI;
-                      yaw += dyaw * (1 - Math.exp(-dt * 3.6));
-                      pitch += (targetLat - pitch) * (1 - Math.exp(-dt * 3.6));
-                    }
+      // word0: clip-path reveal, parallax position & fade
+      const word0Rect = word0.getBoundingClientRect();
+      const wordHeight = word0Rect.height || (portrait ? 0.2 * H : 0.3 * H);
+      const wordWidth = word0Rect.width || (0.7 * W);
+      const I = (1 - iw) * 50;
+      word0.style.clipPath = `inset(-10% ${I}% -10% ${I}%)`;
+      word0.style.opacity = (1 - seg(a, 0.1, 0.5)).toFixed(4);
 
-                    tilt.rotation.x = pitch;
-                    spin.rotation.y = yaw;
+      const w0x = portrait ? 0 : -a * 0.08 * W;
+      const w0y = portrait ? (H * -0.1 + R * 1.08 + wordHeight * 0.5) : (mouseY * -6);
+      word0.style.transform = `translate(calc(-50% + ${w0x}px), calc(-50% + ${w0y}px))`;
 
-                    // Navigational territory highlight
-                    const hiPt = (b > 0.02) ? SITES[curSite] : PRIMARY_REGION;
-                    const hiDirVec = getDir(hiPt.u, hiPt.v);
-                    sphereMat.uniforms.hiDir.value.copy(hiDirVec);
-                    sphereMat.uniforms.hiR.value = (b > 0.02) ? mix(0.55, 0.28, seg(b, 0, 0.1)) : 0.55;
-                    sphereMat.uniforms.hi.value = clamp(seg(a, 0.15, 0.6) + (b > 0 ? 1 : 0));
+      // eyebrow
+      const w0CenterX = W / 2 + w0x;
+      const w0CenterY = H / 2 + w0y;
+      eyebrow.style.opacity = (iw * (1 - seg(a, 0.05, 0.35))).toFixed(4);
+      if (portrait) {
+        eyebrow.style.left = `${w0CenterX}px`;
+        eyebrow.style.top = `${w0CenterY + wordHeight / 2 + 18}px`;
+        eyebrow.style.transform = 'translate(-50%, 0)';
+      } else {
+        const ebX = w0CenterX - wordWidth / 2 + 0.02 * wordWidth;
+        const ebY = w0CenterY - (wordHeight / 2 + 34);
+        eyebrow.style.left = `${ebX}px`;
+        eyebrow.style.top = `${ebY}px`;
+        eyebrow.style.transform = 'none';
+      }
 
-                    // word0: clip-path reveal, parallax position & fade
-                    const word0Rect = word0.getBoundingClientRect();
-                    const wordHeight = word0Rect.height || (portrait ? 0.2 * H : 0.3 * H);
-                    const wordWidth = word0Rect.width || (0.7 * W);
-                    const I = (1 - iw) * 50;
-                    word0.style.clipPath = `inset(-10% ${I}% -10% ${I}%)`;
-                    word0.style.opacity = (1 - seg(a, 0.1, 0.5)).toFixed(4);
+      // flare
+      flare.style.left = `${cx + R * 0.74}px`;
+      flare.style.top = `${cy - R * 0.62}px`;
+      flare.style.opacity = (grow * (0.88 + 0.12 * Math.sin(t * 1.3)) * (1 - seg(bz, 0, 0.35))).toFixed(4);
 
-                    const w0x = portrait ? 0 : -a * 0.08 * W;
-                    const w0y = portrait ? (H * -0.1 + R * 1.08 + wordHeight * 0.5) : (mouseY * -6);
-                    word0.style.transform = `translate(calc(-50% + ${w0x}px), calc(-50% + ${w0y}px))`;
+      // hint
+      hint.style.opacity = (iw * 0.82 * (1 - seg(a, 0, 0.25))).toFixed(4);
 
-                    // eyebrow
-                    const w0CenterX = W / 2 + w0x;
-                    const w0CenterY = H / 2 + w0y;
-                    eyebrow.style.opacity = (iw * (1 - seg(a, 0.05, 0.35))).toFixed(4);
-                    if (portrait) {
-                      eyebrow.style.left = `${w0CenterX}px`;
-                      eyebrow.style.top = `${w0CenterY + wordHeight / 2 + 18}px`;
-                      eyebrow.style.transform = 'translate(-50%, 0)';
-                    } else {
-                      const ebX = w0CenterX - wordWidth / 2 + 0.02 * wordWidth;
-                      const ebY = w0CenterY - (wordHeight / 2 + 34);
-                      eyebrow.style.left = `${ebX}px`;
-                      eyebrow.style.top = `${ebY}px`;
-                      eyebrow.style.transform = 'none';
-                    }
+      // Update All Globe Pins in 3D Space
+      const pinVisibility = (st < 0.05) ? (iw * 0.75) : (st < 1.4 ? 1.0 : (1 - seg(b, 0, 0.18)));
+      ALL_POINTS.forEach((pt, idx) => {
+        const pinEl = pinElements[idx];
+        if (!pinEl) return;
 
-                    // flare
-                    flare.style.left = `${cx + R * 0.74}px`;
-                    flare.style.top = `${cy - R * 0.62}px`;
-                    flare.style.opacity = (grow * (0.88 + 0.12 * Math.sin(t * 1.3)) * (1 - seg(bz, 0, 0.35))).toFixed(4);
+        const pv = pt.dir.clone();
+        pv.applyAxisAngle(new THREE.Vector3(0, 1, 0), yaw);
+        pv.applyAxisAngle(new THREE.Vector3(1, 0, 0), pitch);
 
-                    // hint
-                    hint.style.opacity = (iw * 0.8 * (1 - seg(a, 0, 0.25))).toFixed(4);
-                    hint.style.opacity = (iw * 0.82 * (1 - seg(a, 0, 0.25))).toFixed(4);
+        const pinX = cx + pv.x * R;
+        const pinY = cy - pv.y * R;
 
-                    // pin (projects selected destination from Earth surface)
-                    const siteDir = getDir(SITES[curSite].u, SITES[curSite].v);
-                    const pv = siteDir.clone();
-                    pv.applyAxisAngle(new THREE.Vector3(0, 1, 0), yaw);
-                    pv.applyAxisAngle(new THREE.Vector3(1, 0, 0), pitch);
-                    // Update All Globe Pins in 3D Space
-                    const pinVisibility = (st < 0.05) ? (iw * 0.75) : (st < 1.4 ? 1.0 : (1 - seg(b, 0, 0.18)));
-                    ALL_POINTS.forEach((pt, idx) => {
-                      const pinEl = pinElements[idx];
-                      if (!pinEl) return;
+        const zFade = seg(pv.z, 0.12, 0.38);
+        const finalOp = zFade * pinVisibility;
 
-                      const pinX = cx + pv.x * R - 6;
-                      const pinY = cy - pv.y * R - 8;
-                      pin.style.left = `${pinX}px`;
-                      pin.style.top = `${pinY}px`;
-                      const pinOp = seg(pv.z, 0.22, 0.42) * seg(age, 1.6, 2.1) * (1 - seg(a, 0, 0.3));
-                      pin.style.opacity = pinOp.toFixed(4);
-                      const pv = pt.dir.clone();
-                      pv.applyAxisAngle(new THREE.Vector3(0, 1, 0), yaw);
-                      pv.applyAxisAngle(new THREE.Vector3(1, 0, 0), pitch);
+        pinEl.style.left = `${pinX}px`;
+        pinEl.style.top = `${pinY}px`;
+        pinEl.style.opacity = finalOp.toFixed(4);
+        pinEl.style.pointerEvents = (finalOp > 0.35) ? 'auto' : 'none';
+      });
 
-                      const pinX = cx + pv.x * R;
-                      const pinY = cy - pv.y * R;
+      // word1
+      const ka = seg(a, 0.45, 1);
+      const w1Op = ka * (1 - seg(b, 0.02, 0.16));
+      word1.style.opacity = w1Op.toFixed(4);
+      const w1x = portrait ? 0 : (0.02 * W + (1 - out(ka)) * 40);
+      const w1y = portrait ? 0.46 * H : 0.56 * H;
+      word1.style.transform = `translate(calc(-50% + ${w1x}px), 0)`;
+      word1.style.top = `${w1y}px`;
 
-                      const zFade = seg(pv.z, 0.12, 0.38);
-                      const finalOp = zFade * pinVisibility;
+      // sites + card
+      const scOp = seg(a, 0.55, 1) * (1 - seg(b, 0, 0.14));
+      const scHidden = scOp <= 0.001;
+      sitesUl.style.opacity = scOp.toFixed(4);
+      card.style.opacity = scOp.toFixed(4);
+      sitesUl.style.display = scHidden ? 'none' : (window.innerWidth <= 860 ? 'flex' : 'grid');
+      card.style.display = scHidden ? 'none' : 'block';
+      const scPe = scOp < 0.6 ? 'none' : 'auto';
+      sitesUl.style.pointerEvents = scPe;
+      card.style.pointerEvents = scPe;
 
-                      pinEl.style.left = `${pinX}px`;
-                      pinEl.style.top = `${pinY}px`;
-                      pinEl.style.opacity = finalOp.toFixed(4);
-                      pinEl.style.pointerEvents = (finalOp > 0.35) ? 'auto' : 'none';
-                    });
+      if (window.innerWidth > 860) {
+        const cardTx = (1 - out(seg(a, 0.6, 1))) * 26;
+        card.style.transform = `translateX(${cardTx}px)`;
+      }
 
-                    // word1
-                    const ka = seg(a, 0.45, 1);
-                    const w1Op = ka * (1 - seg(b, 0.02, 0.16));
-                    word1.style.opacity = w1Op.toFixed(4);
-                    const w1x = portrait ? 0 : (0.02 * W + (1 - out(ka)) * 40);
-                    const w1y = portrait ? 0.46 * H : 0.56 * H;
-                    word1.style.transform = `translate(calc(-50% + ${w1x}px), 0)`;
-                    word1.style.top = `${w1y}px`;
+      // #gl canvas interaction window
+      glCanvas.style.pointerEvents = st < 1.02 ? 'auto' : 'none';
 
-                    // sites + card
-                    const scOp = seg(a, 0.55, 1) * (1 - seg(b, 0, 0.14));
-                    const scHidden = scOp <= 0.001;
-                    sitesUl.style.opacity = scOp.toFixed(4);
-                    card.style.opacity = scOp.toFixed(4);
-                    sitesUl.style.display = scHidden ? 'none' : 'grid';
-                    sitesUl.style.display = scHidden ? 'none' : (window.innerWidth <= 860 ? 'flex' : 'grid');
-                    card.style.display = scHidden ? 'none' : 'block';
-                    const scPe = scOp < 0.6 ? 'none' : 'auto';
-                    sitesUl.style.pointerEvents = scPe;
-                    card.style.pointerEvents = scPe;
+      // region
+      const regOp = seg(b, 0.14, 0.26) * (1 - seg(b, 0.42, 0.52));
+      regionEl.style.opacity = regOp.toFixed(4);
+      regionEl.style.left = `${cx}px`;
+      regionEl.style.top = `${cy}px`;
 
-                    const cardTx = (1 - out(seg(a, 0.6, 1))) * 26;
-                    card.style.transform = `translateX(${cardTx}px)`;
-                    if (window.innerWidth > 860) {
-                      const cardTx = (1 - out(seg(a, 0.6, 1))) * 26;
-                      card.style.transform = `translateX(${cardTx}px)`;
-                    }
+      // fog (soft white tropical cloud layer)
+      const fi = seg(b, 0.36, 0.54);
+      const fo = seg(b, 0.62, 0.96);
+      fog.style.opacity = (fi * (1 - fo)).toFixed(4);
 
-                    // #gl canvas interaction window
-                    glCanvas.style.pointerEvents = st < 1.02 ? 'auto' : 'none';
+      // Step 3: Arrival Layers (visible when b > 0.45)
+      const landVis = b > 0.45;
+      land.style.display = landVis ? 'block' : 'none';
+      fore.style.display = landVis ? 'block' : 'none';
+      dest.style.display = landVis ? 'block' : 'none';
 
-                    // region
-                    const regOp = seg(b, 0.14, 0.26) * (1 - seg(b, 0.42, 0.52));
-                    regionEl.style.opacity = regOp.toFixed(4);
-                    regionEl.style.left = `${cx}px`;
-                    regionEl.style.top = `${cy}px`;
+      if (landVis) {
+        const lk = out(seg(b, 0.5, 1));
+        const fk = out(seg(b, 0.58, 1));
+        const dk = out(seg(b, 0.66, 0.98));
+        const drift = 1 + 0.02 * Math.sin(t * 0.18);
 
-                    // fog (soft white tropical cloud layer)
-                    const fi = seg(b, 0.36, 0.54);
-                    const fo = seg(b, 0.62, 0.96);
-                    fog.style.opacity = (fi * (1 - fo)).toFixed(4);
+        // Backdrop landscape
+        const landY = mix(0.2 * H, mouseY * -8, lk);
+        const landScale = mix(1.25, 1.04, lk) * drift;
+        land.style.transform = `translate(${mouseX * -14}px, ${landY}px) scale(${landScale})`;
 
-                    // Step 3: Arrival Layers (visible when b > 0.45)
-                    const landVis = b > 0.45;
-                    land.style.display = landVis ? 'block' : 'none';
-                    fore.style.display = landVis ? 'block' : 'none';
-                    dest.style.display = landVis ? 'block' : 'none';
+        // Foreground tropical fronds & deck architecture (in front of text)
+        const foreY = mix(0.42 * H, 0, fk);
+        fore.style.transform = `translate(${mouseX * -46}px, ${foreY}px) scale(1.06)`;
 
-                    if (landVis) {
-                      const lk = out(seg(b, 0.5, 1));
-                      const fk = out(seg(b, 0.58, 1));
-                      const dk = out(seg(b, 0.66, 0.98));
-                      const drift = 1 + 0.02 * Math.sin(t * 0.18);
+        // Destination title floating in between
+        const destEnd = portrait ? 0.3 * H : 0.27 * H;
+        const destY = mix(0.62 * H, destEnd, dk);
+        dest.style.transform = `translate(${mouseX * -26}px, ${destY}px)`;
 
-                      // Backdrop landscape
-                      const landY = mix(0.2 * H, mouseY * -8, lk);
-                      const landScale = mix(1.25, 1.04, lk) * drift;
-                      land.style.transform = `translate(${mouseX * -14}px, ${landY}px) scale(${landScale})`;
+        const smallEl = dest.querySelector('small');
+        if (smallEl) {
+          smallEl.style.opacity = (seg(b, 0.8, 1) * 0.92).toFixed(4);
+        }
+      }
 
-                      // Foreground tropical fronds & deck architecture (in front of text)
-                      const foreY = mix(0.42 * H, 0, fk);
-                      fore.style.transform = `translate(${mouseX * -46}px, ${foreY}px) scale(1.06)`;
+      // Booking bar
+      const bk = seg(b, 0.86, 1);
+      bar.style.opacity = bk.toFixed(4);
+      bar.style.transform = `translate(-50%, ${(1 - out(bk)) * 34}px)`;
+      bar.style.pointerEvents = bk < 0.1 ? 'none' : 'auto';
 
-                      // Destination title floating in between
-                      const destEnd = portrait ? 0.3 * H : 0.27 * H;
-                      const destY = mix(0.62 * H, destEnd, dk);
-                      dest.style.transform = `translate(${mouseX * -26}px, ${destY}px)`;
+      // Scrim header protector
+      scrim.style.opacity = seg(b, 0.6, 0.9).toFixed(4);
 
-                      const smallEl = dest.querySelector('small');
-                      if (smallEl) {
-                        smallEl.style.opacity = (seg(b, 0.8, 1) * 0.92).toFixed(4);
-                      }
-                    }
+      // Rail dots active indicator
+      const curDot = Math.round(st);
+      railButtons.forEach((btn, idx) => {
+        if (idx === curDot) btn.classList.add('on');
+        else btn.classList.remove('on');
+      });
 
-                    // Booking bar
-                    const bk = seg(b, 0.86, 1);
-                    bar.style.opacity = bk.toFixed(4);
-                    bar.style.transform = `translate(-50%, ${(1 - out(bk)) * 34}px)`;
-                    bar.style.pointerEvents = bk < 0.1 ? 'none' : 'auto';
+      // 8. Render Starlight & Sea Spray Dust motes
+      dustCtx.clearRect(0, 0, W, H);
+      const landingDustFactor = (b > 0.5) ? 0.65 : 1.0;
+      for (let i = 0; i < motes.length; i++) {
+        const m = motes[i];
+        const mx = (((m.x + t * m.s + 2) % 1.1) - 0.05) * W;
+        const my = (m.y + Math.sin(t * 0.3 + m.p) * 0.02) * H;
+        const alpha = (0.3 + 0.35 * Math.pow(Math.sin(t * 0.7 + m.p), 2)) * landingDustFactor;
+        dustCtx.globalAlpha = alpha;
+        dustCtx.drawImage(dustSprite, mx - m.r, my - m.r, m.r * 2, m.r * 2);
+      }
 
-                    // Scrim header protector
-                    scrim.style.opacity = seg(b, 0.6, 0.9).toFixed(4);
+      // Render Three.js scene
+      renderer.render(scene, camera);
 
-                    // Rail dots active indicator
-                    const curDot = Math.round(st);
-                    railButtons.forEach((btn, idx) => {
-                      if (idx === curDot) btn.classList.add('on');
-                      else btn.classList.remove('on');
-                    });
+      requestAnimationFrame(render);
+    }
 
-                    // 8. Render Starlight & Sea Spray Dust motes
-                    dustCtx.clearRect(0, 0, W, H);
-                    const landingDustFactor = (b > 0.5) ? 0.65 : 1.0;
-                    for (let i = 0; i < motes.length; i++) {
-                      const m = motes[i];
-                      const mx = (((m.x + t * m.s + 2) % 1.1) - 0.05) * W;
-                      const my = (m.y + Math.sin(t * 0.3 + m.p) * 0.02) * H;
-                      const alpha = (0.3 + 0.35 * Math.pow(Math.sin(t * 0.7 + m.p), 2)) * landingDustFactor;
-                      dustCtx.globalAlpha = alpha;
-                      dustCtx.drawImage(dustSprite, mx - m.r, my - m.r, m.r * 2, m.r * 2);
-                    }
-
-                    // Render Three.js scene
-                    renderer.render(scene, camera);
-
-                    requestAnimationFrame(render);
-                  }
-
-                  requestAnimationFrame(render);
+    requestAnimationFrame(render);
   </script>
 </body>
-
 </html>
