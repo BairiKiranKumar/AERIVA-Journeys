@@ -1,0 +1,979 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AERIVA Journeys | Mars Expeditions — Three-Step Planetary Experience</title>
+  <meta name="description" content="AERIVA Journeys Mars Expeditions — Experience an unbroken three-step 3D descent from orbit to the Martian canyon spires.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;800;900&display=swap" rel="stylesheet">
+  <style>
+:root{--red:#e8283c;--deep:#2a0d04}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;overflow:hidden;background:var(--deep);color:#fff;font-family:Montserrat,system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:inherit;text-decoration:none}button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+.hero{position:fixed;inset:0;overflow:hidden;background:radial-gradient(58% 72% at 50% 47%,#d0591f 0%,#a23f12 32%,#6b2409 62%,#3b1405 100%)}
+.hero>*{position:absolute}
+
+#word0{left:50%;top:50%;font-weight:900;font-size:min(27vw,50vh);line-height:.8;letter-spacing:-.035em;white-space:nowrap;z-index:2;will-change:transform,clip-path}
+#eyebrow{left:50%;top:50%;z-index:3;font-weight:300;font-size:clamp(14px,1.45vw,23px);letter-spacing:.1em;text-transform:uppercase;white-space:nowrap}
+#gl{inset:0;width:100%;height:100%;z-index:4;cursor:grab;touch-action:none}
+#gl.drag{cursor:grabbing}
+#dust{inset:0;width:100%;height:100%;z-index:5;pointer-events:none}
+#flare{z-index:1;width:44vmin;height:44vmin;margin:-22vmin;border-radius:50%;pointer-events:none;background:radial-gradient(closest-side,rgba(255,236,205,.95),rgba(255,176,96,.42) 26%,rgba(255,140,60,.1) 58%,transparent)}
+
+#pin{z-index:6;left:0;top:0;display:flex;align-items:center;gap:9px;font-weight:600;font-size:11px;letter-spacing:.16em;text-transform:uppercase;pointer-events:none;white-space:nowrap}
+#pin i{width:12px;height:12px;border-radius:50%;background:#fff;position:relative;box-shadow:0 0 0 4px rgba(232,40,60,.75)}
+#pin i::after{content:"";position:absolute;inset:-13px;border-radius:50%;border:1px solid #fff;animation:pulse 2s ease-out infinite}
+@keyframes pulse{from{transform:scale(.4);opacity:1}to{transform:scale(1.4);opacity:0}}
+
+#word1{left:50%;top:0;z-index:6;font-weight:800;font-size:min(9.4vw,19vh);letter-spacing:-.02em;line-height:1;color:rgba(255,255,255,.74);pointer-events:none;white-space:nowrap}
+
+#sites{right:6.2%;top:50%;z-index:7;list-style:none;display:grid;gap:clamp(30px,6.6vh,62px);transform:translateY(-50%)}
+#sites::before{content:"";position:absolute;right:5px;top:6px;bottom:6px;width:1px;background:rgba(255,255,255,.5)}
+#sites li{position:relative;text-align:right;padding-right:30px;cursor:pointer;font-weight:500;font-size:11.5px;letter-spacing:.07em;text-transform:uppercase;transition:font-size .3s}
+#sites li::after{content:"";position:absolute;right:1px;top:50%;width:9px;height:9px;margin-top:-5px;border-radius:50%;background:#fff;transition:transform .3s,box-shadow .3s}
+#sites li.on{font-size:15px}
+#sites li.on::after{transform:scale(1.5);box-shadow:0 0 0 7px rgba(255,255,255,.28)}
+#card{right:calc(6.2% + 196px);top:0;z-index:7;width:clamp(170px,15.5vw,250px);aspect-ratio:1.42;background-repeat:no-repeat;border-radius:3px;box-shadow:0 22px 44px rgba(20,4,0,.45);overflow:visible}
+#card a{position:absolute;left:-26px;bottom:18%;background:var(--red);font-weight:600;font-size:10.5px;letter-spacing:.09em;text-transform:uppercase;padding:9px 15px;border-radius:2px;box-shadow:0 8px 18px rgba(120,10,20,.45);transition:background .2s,transform .2s}
+#card a:hover{background:#c41426;transform:scale(1.04)}
+
+#region{left:50%;top:50%;z-index:7;transform:translate(-50%,-50%);font-weight:500;font-size:clamp(26px,3.4vw,54px);letter-spacing:.04em;pointer-events:none}
+
+#land,#fore{inset:0;background-size:cover;background-repeat:no-repeat}
+#land{z-index:8;background-position:50% 60%;will-change:transform}
+#dest{left:0;right:0;top:0;z-index:9;text-align:center;pointer-events:none}
+#dest small{display:block;font-weight:300;font-size:min(5.2vw,11vh);line-height:1;letter-spacing:.04em;text-transform:uppercase;opacity:.92}
+#dest b{display:block;margin-top:.04em;font-weight:900;font-size:min(9.2vw,19vh);line-height:1;letter-spacing:-.03em;text-transform:uppercase;white-space:nowrap;color:#fff4e6}
+#fore{z-index:10;background-position:50% 100%;will-change:transform}
+#fog{inset:0;z-index:11;pointer-events:none;background:radial-gradient(70% 64% at 50% 46%,#fbe6cd 0%,#f6d3ae 52%,#b36a37 100%)}
+
+#scrim{left:0;right:0;top:0;height:150px;z-index:13;pointer-events:none;background:linear-gradient(rgba(44,14,3,.62),rgba(44,14,3,0))}
+#bar{left:50%;bottom:7.5vh;z-index:12;width:min(86vw,920px);display:grid;grid-template-columns:1fr 1fr 1fr 68px;background:#fff;color:#2b1a12;border-radius:3px;box-shadow:0 24px 60px rgba(30,6,0,.5)}
+#bar div{padding:15px 22px;border-right:1px solid #eadfd6}
+#bar label{display:block;font-weight:500;font-size:10px;letter-spacing:.09em;text-transform:uppercase;color:#9a877b}
+#bar input{width:100%;margin-top:5px;border:0;outline:0;font:600 15px Montserrat,sans-serif;color:#2b1a12;background:none}
+#bar button{background:var(--red);color:#fff;border-radius:0 3px 3px 0;font-size:22px;transition:background .25s;display:grid;place-items:center}
+#bar button:hover{background:#c41426}
+
+/* chrome */
+header{left:0;right:0;top:0;z-index:20;display:flex;align-items:center;padding:clamp(18px,3.2vh,30px) clamp(20px,2.6vw,42px);font-size:11.5px;font-weight:500;letter-spacing:.05em;text-transform:uppercase;pointer-events:none}
+header>*{pointer-events:auto}
+.logo{display:flex;align-items:center;gap:12px;margin-right:auto;font-weight:800;font-size:19px;letter-spacing:-.01em;text-transform:none}
+.logo svg{width:34px;height:34px;flex-shrink:0}
+.logo-sub{font-weight:400;font-size:11px;letter-spacing:.18em;margin-left:4px;opacity:.8;display:inline-block;vertical-align:middle}
+header a{margin-left:clamp(16px,2.6vw,38px);opacity:.92;transition:opacity .2s}
+header a:hover{opacity:1}
+.origin-pill{margin-left:clamp(14px,2.2vw,30px);padding:6px 14px;border-radius:20px;border:1px solid rgba(255,255,255,.25);font-size:10px;letter-spacing:.12em;opacity:.85}
+.ico{width:42px;height:42px;margin-left:clamp(14px,2.4vw,36px);border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.2);transition:background .25s}
+.ico:hover{background:rgba(255,255,255,.34)}
+.ico svg,.srch svg{width:16px;height:16px;fill:none;stroke:#fff;stroke-width:2;stroke-linecap:round}
+.srch{margin-left:clamp(16px,2.6vw,38px)}
+#rail{left:clamp(20px,2.6vw,42px);top:50%;z-index:20;display:grid;gap:15px;transform:translateY(-50%)}
+#rail button{width:9px;height:9px;border-radius:50%;background:rgba(255,255,255,.45);transition:background .3s,transform .3s}
+#rail button.on{background:#fff;transform:scale(1.35)}
+#hint{left:50%;bottom:4.4vh;transform:translateX(-50%);z-index:7;font-weight:400;font-size:11px;letter-spacing:.17em;text-transform:uppercase;opacity:.8;white-space:nowrap}
+
+/* AERIVA Mission Inquiry Modal */
+.aeriva-modal{position:fixed;inset:0;z-index:100;background:rgba(20,5,2,.78);backdrop-filter:blur(8px);display:grid;place-items:center;padding:20px;opacity:0;pointer-events:none;transition:opacity .3s ease}
+.aeriva-modal.open{opacity:1;pointer-events:auto}
+.aeriva-dialog{background:#fff;color:#2b1a12;width:min(90vw,540px);border-radius:4px;padding:36px;box-shadow:0 30px 80px rgba(0,0,0,.6);position:relative}
+.aeriva-dialog-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}
+.aeriva-dialog-tag{font-size:10px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--red)}
+.aeriva-dialog-close{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;font-size:20px;color:#8f7b70;transition:color .2s}
+.aeriva-dialog-close:hover{color:#000}
+.aeriva-dialog h2{font-size:28px;font-weight:900;letter-spacing:-.02em;line-height:1.15;margin-bottom:12px;color:#1c0e08}
+.aeriva-dialog p{font-size:13.5px;line-height:1.6;color:#67544a;margin-bottom:24px}
+.aeriva-meta-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;background:#fbf7f4;border:1px solid #ebdcd1;padding:16px;border-radius:3px;margin-bottom:24px}
+.aeriva-meta-grid div span{display:block;font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:#9b8377;margin-bottom:3px}
+.aeriva-meta-grid div strong{font-size:13px;font-weight:700;color:#2a160d}
+.aeriva-dialog-actions{display:flex;gap:12px}
+.aeriva-dialog-actions .btn-confirm{flex:1;background:var(--red);color:#fff;font-weight:600;font-size:12px;letter-spacing:.1em;text-transform:uppercase;padding:14px;border-radius:2px;transition:background .2s}
+.aeriva-dialog-actions .btn-confirm:hover{background:#c41426}
+
+@media (max-width:760px){
+  header a:not(.logo),.origin-pill{display:none}
+  #word0{font-size:29vw}
+  #eyebrow{font-size:12px}
+  #word1{font-size:15vw}
+  #sites{right:18px;top:auto;bottom:11vh;transform:none;gap:22px}
+  #card{right:auto;left:18px;top:auto!important;bottom:11vh;width:42vw}
+  #card a{left:8px;bottom:8px}
+  #dest b{font-size:11vw}#dest small{font-size:7vw}
+  #bar{grid-template-columns:1fr 1fr;width:calc(100vw - 32px);bottom:4vh}
+  #bar div:nth-child(2){border-right:0}
+  #bar div{padding:11px 14px;border-bottom:1px solid #eadfd6}
+  #bar button{height:46px;border-radius:0 0 3px 0}
+  #hint,#rail{display:none}
+  #fore{background-size:210% auto}
+}
+  </style>
+
+  <script type="importmap">
+  {
+    "imports": {
+      "three": "https://cdn.jsdelivr.net/npm/three@0.170.0/build/three.module.js"
+    }
+  }
+  </script>
+</head>
+<body>
+  <main class="hero" id="hero">
+    <div id="word0">MARS</div>
+    <div id="eyebrow">Book your seat to</div>
+    <div id="flare"></div>
+    <canvas id="gl"></canvas>
+    <canvas id="dust"></canvas>
+    <div id="pin"><i></i><span>Tharsis</span></div>
+    <div id="word1">THARSIS</div>
+    <ul id="sites"></ul>
+    <div id="card"><a href="#" id="explore">Explore</a></div>
+    <div id="region">THARSIS</div>
+    <div id="land"></div>
+    <div id="dest"><small>Tharsis</small><b id="destName">Olympus Mons</b></div>
+    <div id="fore"></div>
+    <div id="fog"></div>
+    <div id="scrim"></div>
+
+    <form id="bar" onsubmit="return false">
+      <div><label for="d1">Depart Earth</label><input id="d1" value="12 Mar 2041 · HYD"></div>
+      <div><label for="d2">Return</label><input id="d2" value="30 Sep 2042"></div>
+      <div><label for="d3">Passengers</label><input id="d3" value="2 adults"></div>
+      <button id="searchSeats" aria-label="Search seats">→</button>
+    </form>
+
+    <header>
+      <a class="logo" href="#" id="home" style="margin-left:0;opacity:1">
+        <svg viewBox="0 0 36 36" fill="none" stroke="#fff" stroke-linecap="round">
+          <circle cx="18" cy="18" r="15.5" stroke-width="1.2"/>
+          <path stroke-width="1.6" d="M7 23c5-2 9-7 13-15m-4 17c3-7 7-11 13-12M8 26c8-3 15-5 21-4"/>
+          <circle cx="28" cy="12" r="2.2" fill="#fff" stroke="none"/>
+        </svg>
+        <span>AERIVA <span class="logo-sub">JOURNEYS</span></span>
+      </a>
+      <span class="origin-pill">Departure / Hyderabad</span>
+      <a href="#" id="navExpeditions">Expeditions</a>
+      <a href="#" id="navPhilosophy">Philosophy</a>
+      <a href="#" id="navLogin">Login</a>
+      <span class="srch"><svg viewBox="0 0 24 24"><circle cx="10.500" cy="10.500" r="6.500"/><path d="m15.500 15.500 5 5"/></svg></span>
+      <button class="ico" id="menuBtn" aria-label="Menu"><svg viewBox="0 0 24 24"><path d="M5 8h14M7 12h10M5 16h14"/></svg></button>
+    </header>
+
+    <div id="rail">
+      <button aria-label="Mars" class="on"></button>
+      <button aria-label="Tharsis"></button>
+      <button aria-label="Destination"></button>
+    </div>
+
+    <div id="hint">Drag to spin · click the planet to land</div>
+
+    <!-- AERIVA Modal Dialog -->
+    <div class="aeriva-modal" id="aerivaModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+      <div class="aeriva-dialog">
+        <div class="aeriva-dialog-head">
+          <span class="aeriva-dialog-tag">AERIVA Journeys · Interplanetary</span>
+          <button class="aeriva-dialog-close" id="closeModal" type="button" aria-label="Close dialog">✕</button>
+        </div>
+        <h2 id="modalTitle">Reserve Your Seat to <span id="modalDest">Olympus Mons</span></h2>
+        <p>Your interplanetary flight trajectory is calculated from Hyderabad Earth Terminal into Martian low-orbit arrival.</p>
+        <div class="aeriva-meta-grid">
+          <div>
+            <span>Departure Point</span>
+            <strong>Hyderabad (HYD) / Earth</strong>
+          </div>
+          <div>
+            <span>Target Region</span>
+            <strong>Tharsis Montes, Mars</strong>
+          </div>
+          <div>
+            <span>Launch Date</span>
+            <strong id="modalDate">12 Mar 2041</strong>
+          </div>
+          <div>
+            <span>Voyagers</span>
+            <strong id="modalPass">2 Adults (Orbital Suite)</strong>
+          </div>
+        </div>
+        <div class="aeriva-dialog-actions">
+          <button class="btn-confirm" id="confirmEnquiry" type="button">Confirm Mission Request</button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script type="module">
+    import * as THREE from 'three';
+
+    // 1. Assets (exact prompt URLs)
+    const P = 'https://images.higgs.ai/?default=1&output=webp&url=https%3A%2F%2Fd8j0ntlcm91z4.cloudfront.net%2Fuser_38xzZboKViGWJOttwIXH07lWA1P%2Fhf_';
+    const MAP = P + '20261031_030432_a1948696-c1d5-4468-845e-7d1291f80943.png&w=2688&q=92';
+    const LAND = P + '20261031_030420_da39d0cf-af67-4e33-a487-6469549cfbff.png&w=2400&q=88';
+    const FORE = P + '20261031_030420_fe406b69-3e6f-4b7c-a17e-ef09db0d270b.png&w=2400&q=88';
+    const CARDS = P + '20261031_030420_e222aa05-c121-4f31-a466-0321badc0e28.png&w=1400&q=85';
+
+    // Preload background images
+    new Image().src = LAND;
+    new Image().src = FORE;
+    new Image().src = CARDS;
+
+    // 4. Data
+    const SHEET = { w: 2336, h: 1744 };
+    const SITES = [
+      { name: 'Olympus Mons', u: 0.121, v: 0.31, box: [0, 0, 1150, 810] },
+      { name: 'Valles Marineris', u: 0.45, v: 0.56, box: [1186, 0, 1150, 810] },
+      { name: 'Gale Crater', u: 0.85, v: 0.75, box: [0, 900, 1150, 810] },
+      { name: 'Jezero Delta', u: 0.61, v: 0.35, box: [1186, 900, 1150, 810] }
+    ];
+    const THARSIS = { u: 0.15, v: 0.41 };
+
+    // Math helpers
+    function clamp(val, min = 0, max = 1) {
+      return Math.min(max, Math.max(min, val));
+    }
+    function seg(p, a, b) {
+      return clamp((p - a) / (b - a));
+    }
+    function io(k) {
+      return k < 0.5 ? 4 * k * k * k : 1 - Math.pow(-2 * k + 2, 3) / 2;
+    }
+    function out(k) {
+      return 1 - Math.pow(1 - k, 3);
+    }
+    function mix(x, y, a) {
+      return x + (y - x) * a;
+    }
+
+    // Direction matching SphereGeometry UV convention
+    function getDir(u, v) {
+      const ph = 2 * Math.PI * u;
+      const th = Math.PI * v;
+      return new THREE.Vector3(
+        -Math.cos(ph) * Math.sin(th),
+        Math.cos(th),
+        Math.sin(ph) * Math.sin(th)
+      );
+    }
+
+    // DOM Elements
+    const heroEl = document.getElementById('hero');
+    const word0 = document.getElementById('word0');
+    const eyebrow = document.getElementById('eyebrow');
+    const flare = document.getElementById('flare');
+    const glCanvas = document.getElementById('gl');
+    const dustCanvas = document.getElementById('dust');
+    const pin = document.getElementById('pin');
+    const word1 = document.getElementById('word1');
+    const sitesUl = document.getElementById('sites');
+    const card = document.getElementById('card');
+    const exploreBtn = document.getElementById('explore');
+    const regionEl = document.getElementById('region');
+    const land = document.getElementById('land');
+    const dest = document.getElementById('dest');
+    const destName = document.getElementById('destName');
+    const fore = document.getElementById('fore');
+    const fog = document.getElementById('fog');
+    const scrim = document.getElementById('scrim');
+    const bar = document.getElementById('bar');
+    const hint = document.getElementById('hint');
+    const railButtons = Array.from(document.querySelectorAll('#rail button'));
+    const homeBtn = document.getElementById('home');
+    const modalEl = document.getElementById('aerivaModal');
+    const closeModalBtn = document.getElementById('closeModal');
+    const confirmEnquiryBtn = document.getElementById('confirmEnquiry');
+    const modalDest = document.getElementById('modalDest');
+    const modalDate = document.getElementById('modalDate');
+    const modalPass = document.getElementById('modalPass');
+    const d1Input = document.getElementById('d1');
+    const d3Input = document.getElementById('d3');
+
+    // Set background images
+    land.style.backgroundImage = `url("${LAND}")`;
+    fore.style.backgroundImage = `url("${FORE}")`;
+    card.style.backgroundImage = `url("${CARDS}")`;
+
+    // Viewport and layout
+    let W = window.innerWidth;
+    let H = window.innerHeight;
+    let portrait = H > W * 1.05;
+    let R0 = portrait ? W * 0.36 : Math.min(H * 0.3, W * 0.19);
+
+    // State flow
+    let st = 0;
+    let from = 0;
+    let to = 0;
+    let t0 = performance.now();
+    let dur = 1300;
+    let curSite = 0;
+
+    function getSpanDuration(f, t) {
+      if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return 1;
+      const minVal = Math.min(f, t);
+      const maxVal = Math.max(f, t);
+      let d = 0;
+      if (minVal < 1 && maxVal > 0) {
+        d += (Math.min(maxVal, 1) - Math.max(minVal, 0)) * 1300;
+      }
+      if (maxVal > 1) {
+        d += (Math.min(maxVal, 2) - Math.max(minVal, 1)) * 2500;
+      }
+      return Math.max(1, d);
+    }
+
+    function go(n) {
+      n = Math.max(0, Math.min(2, n));
+      if (n === to) return;
+      from = st;
+      to = n;
+      t0 = performance.now();
+      dur = getSpanDuration(from, to);
+    }
+
+    // Three.js setup
+    const renderer = new THREE.WebGLRenderer({
+      canvas: glCanvas,
+      alpha: true,
+      antialias: true
+    });
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    renderer.setPixelRatio(dpr);
+    renderer.setSize(W, H);
+
+    const camera = new THREE.OrthographicCamera(
+      -W / 2, W / 2, H / 2, -H / 2, -2e5, 2e5
+    );
+    camera.position.set(0, 0, 1000);
+    camera.lookAt(0, 0, 0);
+
+    const scene = new THREE.Scene();
+    const planet = new THREE.Group();
+    const tilt = new THREE.Group();
+    const spin = new THREE.Group();
+
+    planet.add(tilt);
+    tilt.add(spin);
+    scene.add(planet);
+
+    // Planet Shader
+    const sphereGeo = new THREE.SphereGeometry(1, 128, 96);
+    const sphereMat = new THREE.ShaderMaterial({
+      uniforms: {
+        map: { value: null },
+        ready: { value: 0.0 },
+        texel: { value: new THREE.Vector2(1 / 2688, 1 / 1344) },
+        sun: { value: new THREE.Vector3(0.62, 0.5, 0.6).normalize() },
+        hiDir: { value: new THREE.Vector3() },
+        hi: { value: 0.0 },
+        hiR: { value: 0.62 }
+      },
+      vertexShader: `
+        varying vec2 vUv;
+        varying vec3 vObj;
+        varying vec3 vN;
+        void main(){
+          vUv = uv;
+          vObj = normalize(position);
+          vN = normalize(mat3(modelMatrix) * normal);
+          gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.);
+        }
+      `,
+      fragmentShader: `
+        uniform sampler2D map;
+        uniform vec2 texel;
+        uniform vec3 sun, hiDir;
+        uniform float hi, hiR, ready;
+        varying vec2 vUv;
+        varying vec3 vObj;
+        varying vec3 vN;
+        float luma(vec2 u){ return dot(texture2D(map, u).rgb, vec3(.3,.6,.1)); }
+        void main(){
+          vec3 col = texture2D(map, vUv).rgb; col = pow(col, vec3(2.6)) * vec3(1.18,.74,.56);
+          // relief from the map's own brightness
+          vec3 n = normalize(vN);
+          vec3 t = normalize(cross(vec3(0.,1.,0.), n)), b = cross(n, t);
+          float dx = luma(vUv + vec2(texel.x*2.,0.)) - luma(vUv - vec2(texel.x*2.,0.));
+          float dy = luma(vUv + vec2(0.,texel.y*2.)) - luma(vUv - vec2(0.,texel.y*2.));
+          n = normalize(n - (t*dx + b*dy) * 1.9);
+          float diff = max(dot(n, sun), 0.);
+          vec3 lit = col * (vec3(1.5,1.32,1.18) * pow(diff, .85) + vec3(.2,.09,.06));
+          // highlighted region with a rough edge, like a territory on a map
+          float d = acos(clamp(dot(normalize(vObj), hiDir), -1., 1.)) + (luma(vUv) - .45) * .22;
+          float m = smoothstep(hiR, hiR - .03, d), edge = smoothstep(.03, .0, abs(d - hiR + .01));
+          lit = mix(lit, mix(lit, vec3(.62,.012,.07) * (.25 + diff * 1.05) * (.5 + luma(vUv) * 1.1), .9), m * hi) + vec3(1.,.42,.4) * edge * hi * .22;
+          float fres = pow(1. - max(vN.z, 0.), 3.2);
+          lit += vec3(1.,.5,.26) * fres * (.05 + diff * .5);
+          lit = lit / (lit * .3 + 1.) * 1.3;
+          gl_FragColor = vec4(pow(lit, vec3(1./2.2)), 1.) * ready;
+        }
+      `
+    });
+    const sphereMesh = new THREE.Mesh(sphereGeo, sphereMat);
+    spin.add(sphereMesh);
+
+    // Atmosphere Shader (attached to planet, not spun)
+    const atmoGeo = new THREE.SphereGeometry(1.14, 64, 48);
+    const atmoMat = new THREE.ShaderMaterial({
+      uniforms: {
+        sun: { value: new THREE.Vector3(0.62, 0.5, 0.6).normalize() },
+        ready: { value: 0.0 }
+      },
+      vertexShader: `
+        varying vec3 vN;
+        void main(){
+          vN = normalize(mat3(modelMatrix)*normal);
+          gl_Position = projectionMatrix*modelViewMatrix*vec4(position,1.);
+        }
+      `,
+      fragmentShader: `
+        uniform vec3 sun;
+        uniform float ready;
+        varying vec3 vN;
+        void main(){
+          float z = clamp(-vN.z, 0., 1.), a = smoothstep(.0, .55, z);
+          float s = .55 + .6 * max(dot(-vN * vec3(1.,1.,0.), normalize(sun * vec3(1.,1.,0.))), 0.);
+          a = pow(a, 2.6) * s * .7;
+          gl_FragColor = vec4(vec3(1.,.64,.36), a * ready);
+        }
+      `,
+      side: THREE.BackSide,
+      blending: THREE.AdditiveBlending,
+      transparent: true,
+      depthWrite: false
+    });
+    const atmoMesh = new THREE.Mesh(atmoGeo, atmoMat);
+    planet.add(atmoMesh);
+
+    // Map texture loader with seamless canvas patch & polar gradients
+    let mapLoaded = false;
+    let mapLoadTime = performance.now();
+
+    const mapImage = new Image();
+    mapImage.crossOrigin = 'anonymous';
+    mapImage.src = MAP;
+    mapImage.onload = () => {
+      const CW = 2688;
+      const CH = 1344;
+      const cvs = document.createElement('canvas');
+      cvs.width = CW;
+      cvs.height = CH;
+      const ctx = cvs.getContext('2d');
+      ctx.drawImage(mapImage, 0, 0, CW, CH);
+
+      // Copy left 7% width onto temp canvas
+      const fw = Math.round(CW * 0.07);
+      const tempCvs = document.createElement('canvas');
+      tempCvs.width = fw;
+      tempCvs.height = CH;
+      const tempCtx = tempCvs.getContext('2d');
+      tempCtx.drawImage(cvs, 0, 0, fw, CH, 0, 0, fw, CH);
+
+      // Mask with destination-in horizontal gradient (left transparent to right opaque)
+      tempCtx.globalCompositeOperation = 'destination-in';
+      const hGrad = tempCtx.createLinearGradient(0, 0, fw, 0);
+      hGrad.addColorStop(0, 'rgba(0,0,0,0)');
+      hGrad.addColorStop(1, 'rgba(0,0,0,1)');
+      tempCtx.fillStyle = hGrad;
+      tempCtx.fillRect(0, 0, fw, CH);
+
+      // Draw at x = CW - fw
+      ctx.globalCompositeOperation = 'source-over';
+      ctx.drawImage(tempCvs, CW - fw, 0);
+
+      // Vertical gradients over top & bottom 3.5% from #e9dfd2 to transparent
+      const ph = Math.round(CH * 0.035);
+      const topGrad = ctx.createLinearGradient(0, 0, 0, ph);
+      topGrad.addColorStop(0, '#e9dfd2');
+      topGrad.addColorStop(1, 'rgba(233,223,210,0)');
+      ctx.fillStyle = topGrad;
+      ctx.fillRect(0, 0, CW, ph);
+
+      const botGrad = ctx.createLinearGradient(0, CH - ph, 0, CH);
+      botGrad.addColorStop(0, 'rgba(233,223,210,0)');
+      botGrad.addColorStop(1, '#e9dfd2');
+      ctx.fillStyle = botGrad;
+      ctx.fillRect(0, CH - ph, CW, ph);
+
+      // Use as CanvasTexture
+      const canvasTexture = new THREE.CanvasTexture(cvs);
+      canvasTexture.colorSpace = THREE.NoColorSpace;
+      canvasTexture.wrapS = THREE.RepeatWrapping;
+      canvasTexture.anisotropy = renderer.capabilities.getMaxAnisotropy();
+      canvasTexture.needsUpdate = true;
+
+      sphereMat.uniforms.map.value = canvasTexture;
+      sphereMat.uniforms.ready.value = 1.0;
+      atmoMat.uniforms.ready.value = 1.0;
+      mapLoaded = true;
+      mapLoadTime = performance.now();
+    };
+
+    // Rotation state
+    const initD = getDir(0.4, 0.5);
+    let yaw = Math.atan2(-initD.x, initD.z);
+    let pitch = 0.16;
+    let vy = 0;
+    let lastDragTime = 0;
+    let isDragging = false;
+    let dragStartX = 0;
+    let dragStartY = 0;
+    let dragLastX = 0;
+    let dragLastY = 0;
+    let movedTotal = 0;
+
+    // Pointer mouse position for parallax
+    let pointerX = W * 0.5;
+    let pointerY = H * 0.5;
+    let mouseX = 0;
+    let mouseY = 0;
+
+    // Sites list & pick implementation
+    function pick(i) {
+      curSite = i;
+      const site = SITES[i];
+      if (!site) return;
+
+      const lis = sitesUl.querySelectorAll('li');
+      lis.forEach((li, idx) => {
+        if (idx === i) li.classList.add('on');
+        else li.classList.remove('on');
+      });
+
+      const [x, y, w, h] = site.box;
+      const bw = (SHEET.w / w) * 100;
+      const bh = (SHEET.h / h) * 100;
+      const bx = (SHEET.w - w === 0) ? 0 : (x / (SHEET.w - w)) * 100;
+      const by = (SHEET.h - h === 0) ? 0 : (y / (SHEET.h - h)) * 100;
+      card.style.backgroundSize = `${bw}% ${bh}%`;
+      card.style.backgroundPosition = `${bx}% ${by}%`;
+
+      const activeLi = lis[i];
+      if (activeLi && window.innerWidth > 760) {
+        const liRect = activeLi.getBoundingClientRect();
+        const heroRect = heroEl.getBoundingClientRect();
+        const topPx = (liRect.top - heroRect.top) + liRect.height / 2 - card.offsetHeight / 2;
+        card.style.top = `${topPx}px`;
+      }
+
+      destName.textContent = site.name;
+      regionEl.textContent = site.name.toUpperCase();
+      if (modalDest) modalDest.textContent = site.name;
+    }
+
+    // Populate sites timeline
+    sitesUl.innerHTML = '';
+    SITES.forEach((site, i) => {
+      const li = document.createElement('li');
+      li.dataset.i = i;
+      li.textContent = site.name;
+      li.addEventListener('mouseenter', () => pick(i));
+      li.addEventListener('click', () => {
+        pick(i);
+        go(2);
+      });
+      sitesUl.appendChild(li);
+    });
+    pick(0);
+
+    // Navigation triggers
+    exploreBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      go(2);
+    });
+    homeBtn.addEventListener('click', (e) => {
+      e.preventDefault();
+      go(0);
+    });
+    railButtons.forEach((btn, idx) => {
+      btn.addEventListener('click', () => go(idx));
+    });
+
+    // Modal dialog triggers
+    function openModal() {
+      if (modalDest) modalDest.textContent = SITES[curSite].name;
+      if (modalDate && d1Input) modalDate.textContent = d1Input.value || '12 Mar 2041';
+      if (modalPass && d3Input) modalPass.textContent = d3Input.value || '2 adults';
+      modalEl.classList.add('open');
+    }
+    function closeModal() {
+      modalEl.classList.remove('open');
+    }
+    document.getElementById('searchSeats').addEventListener('click', openModal);
+    closeModalBtn.addEventListener('click', closeModal);
+    confirmEnquiryBtn.addEventListener('click', () => {
+      alert(`AERIVA Mars Mission confirmed for ${SITES[curSite].name}. Your mission package has been reserved from Earth (Hyderabad Departures).`);
+      closeModal();
+    });
+    modalEl.addEventListener('click', (e) => {
+      if (e.target === modalEl) closeModal();
+    });
+
+    // Pointer events on Three.js canvas
+    glCanvas.addEventListener('pointerdown', (e) => {
+      if (st >= 1.02) return;
+      isDragging = true;
+      dragStartX = dragLastX = e.clientX;
+      dragStartY = dragLastY = e.clientY;
+      movedTotal = 0;
+      glCanvas.classList.add('drag');
+      glCanvas.setPointerCapture(e.pointerId);
+    });
+
+    glCanvas.addEventListener('pointermove', (e) => {
+      if (!isDragging) return;
+      const dx = e.clientX - dragLastX;
+      const dy = e.clientY - dragLastY;
+      movedTotal += Math.hypot(dx, dy);
+
+      const k = 1.1 / R0;
+      yaw += dx * k;
+      pitch = clamp(pitch + dy * k, -1, 1);
+      vy = dx * k * 0.25;
+
+      dragLastX = e.clientX;
+      dragLastY = e.clientY;
+      lastDragTime = performance.now();
+    });
+
+    const onPointerUp = (e) => {
+      if (!isDragging) return;
+      isDragging = false;
+      glCanvas.classList.remove('drag');
+      lastDragTime = performance.now();
+      if (glCanvas.hasPointerCapture(e.pointerId)) {
+        glCanvas.releasePointerCapture(e.pointerId);
+      }
+
+      // Planet click check: moved < 6px, inside radius R, to < 2
+      if (movedTotal < 6 && to < 2) {
+        const distFromCenter = Math.hypot(e.clientX - curPlanetCx, e.clientY - curPlanetCy);
+        if (distFromCenter <= curPlanetR * 1.06) {
+          go(to + 1);
+        }
+      }
+    };
+    glCanvas.addEventListener('pointerup', onPointerUp);
+    glCanvas.addEventListener('pointercancel', onPointerUp);
+
+    // Global mouse tracking
+    window.addEventListener('pointermove', (e) => {
+      pointerX = e.clientX;
+      pointerY = e.clientY;
+      mouseX = pointerX / W - 0.5;
+      mouseY = pointerY / H - 0.5;
+    });
+
+    // Wheel trigger: deltaY beyond ±8 steps to ±1 (locked 1400ms)
+    let lastWheelTime = 0;
+    window.addEventListener('wheel', (e) => {
+      const now = performance.now();
+      if (now - lastWheelTime < 1400) return;
+      if (Math.abs(e.deltaY) > 8) {
+        if (e.deltaY > 0) {
+          if (to < 2) {
+            go(to + 1);
+            lastWheelTime = now;
+          }
+        } else {
+          if (to > 0) {
+            go(to - 1);
+            lastWheelTime = now;
+          }
+        }
+      }
+    }, { passive: true });
+
+    // Escape steps back or closes modal
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        if (modalEl.classList.contains('open')) {
+          closeModal();
+          return;
+        }
+        if (to > 0) go(to - 1);
+      }
+    });
+
+    // 8. Dust Canvas & Particle Engine
+    const dustCtx = dustCanvas.getContext('2d');
+    const dustDpr = Math.min(window.devicePixelRatio || 1, 1.5);
+
+    // Pre-render 64px radial sprite: rgba(255,214,170,.95) -> rgba(255,180,120,.42) at .4 -> transparent
+    const dustSprite = document.createElement('canvas');
+    dustSprite.width = 64;
+    dustSprite.height = 64;
+    const sCtx = dustSprite.getContext('2d');
+    const sGrad = sCtx.createRadialGradient(32, 32, 0, 32, 32, 32);
+    sGrad.addColorStop(0, 'rgba(255,214,170,0.95)');
+    sGrad.addColorStop(0.4, 'rgba(255,180,120,0.42)');
+    sGrad.addColorStop(1, 'rgba(255,180,120,0)');
+    sCtx.fillStyle = sGrad;
+    sCtx.fillRect(0, 0, 64, 64);
+
+    // Seeded random for 34 motes
+    function seededRng(seed) {
+      let s = seed % 2147483647;
+      if (s <= 0) s += 2147483646;
+      return () => (s = (s * 16807) % 2147483647) / 2147483647;
+    }
+    const rng = seededRng(1048576);
+    const motes = [];
+    for (let i = 0; i < 34; i++) {
+      const rndR = rng();
+      motes.push({
+        x: rng(),
+        y: rng(),
+        r: 3 + rndR * rndR * 34,
+        s: 0.004 + rng() * 0.012,
+        p: rng() * 6.28
+      });
+    }
+
+    // Resize handler
+    function onResize() {
+      W = window.innerWidth;
+      H = window.innerHeight;
+      portrait = H > W * 1.05;
+      R0 = portrait ? W * 0.36 : Math.min(H * 0.3, W * 0.19);
+
+      camera.left = -W / 2;
+      camera.right = W / 2;
+      camera.top = H / 2;
+      camera.bottom = -H / 2;
+      camera.updateProjectionMatrix();
+
+      renderer.setSize(W, H);
+
+      dustCanvas.width = W * dustDpr;
+      dustCanvas.height = H * dustDpr;
+      dustCtx.setTransform(dustDpr, 0, 0, dustDpr, 0, 0);
+
+      pick(curSite);
+    }
+    window.addEventListener('resize', onResize);
+    onResize();
+
+    // Cache planet center and radius for click detection
+    let curPlanetCx = W * 0.5;
+    let curPlanetCy = H * 0.5;
+    let curPlanetR = R0;
+
+    // 7. Render Loop: Every moving value computed in one render(now)
+    let lastTime = performance.now();
+
+    function render(now) {
+      const dt = Math.min((now - lastTime) / 1000, 0.05);
+      lastTime = now;
+      const t = now * 0.001;
+
+      // State progress interpolation
+      const progress = dur <= 1 ? 1 : seg(now, t0, t0 + dur);
+      st = mix(from, to, io(progress));
+      const a = clamp(st, 0, 1);
+      const b = clamp(st - 1, 0, 1);
+
+      // Intro timing
+      const age = (now - mapLoadTime) / 1000;
+      const grow = out(seg(age, 0, 1.5));
+      const iw = out(seg(age, 0.75, 1.7));
+
+      // Planet coordinates and radius
+      const bz = io(seg(b, 0, 0.62));
+      const px = portrait ? 0.5 * W : mix(0.5 * W, 0.36 * W, a);
+      const py = portrait ? mix(0.4 * H, 0.33 * H, a) : 0.5 * H;
+      const R = R0 * mix(0.03, 1, grow) * (1 + a * 0.04) * Math.exp(bz * 2.5);
+      const cx = mix(px, 0.5 * W, bz);
+      const cy = mix(py, 0.5 * H, bz);
+
+      curPlanetCx = cx;
+      curPlanetCy = cy;
+      curPlanetR = R;
+
+      planet.scale.setScalar(R);
+      planet.position.set(cx - W / 2, H / 2 - cy, 0);
+
+      // Rotation updates
+      const timeSinceDrag = (now - lastDragTime) / 1000;
+      if (st < 0.02 && !isDragging) {
+        if (timeSinceDrag > 1.5) {
+          yaw += dt * (0.08 + (1 - grow) * 2.4);
+        }
+        yaw += vy;
+        vy *= Math.exp(-dt * 4);
+        pitch += (0.16 - pitch) * (1 - Math.exp(-dt * 1.2));
+      } else if (st > 0.02) {
+        // Target orientation
+        const targetPt = (b > 0) ? SITES[curSite] : THARSIS;
+        const targetD = getDir(targetPt.u, targetPt.v);
+        const targetYaw = Math.atan2(-targetD.x, targetD.z);
+        const targetLat = Math.asin(clamp(targetD.y, -1, 1));
+
+        // Shortest arc yaw ease at rate 3.6
+        let dyaw = ((targetYaw - yaw) % (2 * Math.PI) + 3 * Math.PI) % (2 * Math.PI) - Math.PI;
+        yaw += dyaw * (1 - Math.exp(-dt * 3.6));
+        pitch += (targetLat - pitch) * (1 - Math.exp(-dt * 3.6));
+      }
+
+      tilt.rotation.x = pitch;
+      spin.rotation.y = yaw;
+
+      // Highlight uniforms
+      const hiPt = (b > 0.02) ? SITES[curSite] : THARSIS;
+      const hiDirVec = getDir(hiPt.u, hiPt.v);
+      sphereMat.uniforms.hiDir.value.copy(hiDirVec);
+      sphereMat.uniforms.hiR.value = (b > 0.02) ? mix(0.62, 0.3, seg(b, 0, 0.1)) : 0.62;
+      sphereMat.uniforms.hi.value = clamp(seg(a, 0.15, 0.6) + (b > 0 ? 1 : 0));
+
+      // word0: clip-path, position, opacity
+      const word0Rect = word0.getBoundingClientRect();
+      const wordHeight = word0Rect.height || (portrait ? 0.2 * H : 0.3 * H);
+      const wordWidth = word0Rect.width || (0.7 * W);
+      const I = (1 - iw) * 50;
+      word0.style.clipPath = `inset(-10% ${I}% -10% ${I}%)`;
+      word0.style.opacity = (1 - seg(a, 0.1, 0.5)).toFixed(4);
+
+      const w0x = portrait ? 0 : -a * 0.08 * W;
+      const w0y = portrait ? (H * -0.1 + R * 1.08 + wordHeight * 0.5) : (mouseY * -6);
+      word0.style.transform = `translate(calc(-50% + ${w0x}px), calc(-50% + ${w0y}px))`;
+
+      // eyebrow
+      const w0CenterX = W / 2 + w0x;
+      const w0CenterY = H / 2 + w0y;
+      eyebrow.style.opacity = (iw * (1 - seg(a, 0.05, 0.35))).toFixed(4);
+      if (portrait) {
+        eyebrow.style.left = `${w0CenterX}px`;
+        eyebrow.style.top = `${w0CenterY + wordHeight / 2 + 18}px`;
+        eyebrow.style.transform = 'translate(-50%, 0)';
+      } else {
+        const ebX = w0CenterX - wordWidth / 2 + 0.02 * wordWidth;
+        const ebY = w0CenterY - (wordHeight / 2 + 34);
+        eyebrow.style.left = `${ebX}px`;
+        eyebrow.style.top = `${ebY}px`;
+        eyebrow.style.transform = 'none';
+      }
+
+      // flare
+      flare.style.left = `${cx + R * 0.74}px`;
+      flare.style.top = `${cy - R * 0.62}px`;
+      flare.style.opacity = (grow * (0.88 + 0.12 * Math.sin(t * 1.3)) * (1 - seg(bz, 0, 0.35))).toFixed(4);
+
+      // hint
+      hint.style.opacity = (iw * 0.8 * (1 - seg(a, 0, 0.25))).toFixed(4);
+
+      // pin (projects Tharsis: dir rotated by spin then tilt)
+      const tharsisDir = getDir(THARSIS.u, THARSIS.v);
+      const pv = tharsisDir.clone();
+      pv.applyAxisAngle(new THREE.Vector3(0, 1, 0), yaw);
+      pv.applyAxisAngle(new THREE.Vector3(1, 0, 0), pitch);
+
+      const pinX = cx + pv.x * R - 6;
+      const pinY = cy - pv.y * R - 8;
+      pin.style.left = `${pinX}px`;
+      pin.style.top = `${pinY}px`;
+      const pinOp = seg(pv.z, 0.22, 0.42) * seg(age, 1.6, 2.1) * (1 - seg(a, 0, 0.3));
+      pin.style.opacity = pinOp.toFixed(4);
+
+      // word1
+      const ka = seg(a, 0.45, 1);
+      const w1Op = ka * (1 - seg(b, 0.02, 0.16));
+      word1.style.opacity = w1Op.toFixed(4);
+      const w1x = portrait ? 0 : (0.02 * W + (1 - out(ka)) * 40);
+      const w1y = portrait ? 0.46 * H : 0.56 * H;
+      word1.style.transform = `translate(calc(-50% + ${w1x}px), 0)`;
+      word1.style.top = `${w1y}px`;
+
+      // sites + card
+      const scOp = seg(a, 0.55, 1) * (1 - seg(b, 0, 0.14));
+      const scHidden = scOp <= 0.001;
+      sitesUl.style.opacity = scOp.toFixed(4);
+      card.style.opacity = scOp.toFixed(4);
+      sitesUl.style.display = scHidden ? 'none' : 'grid';
+      card.style.display = scHidden ? 'none' : 'block';
+      const scPe = scOp < 0.6 ? 'none' : 'auto';
+      sitesUl.style.pointerEvents = scPe;
+      card.style.pointerEvents = scPe;
+
+      const cardTx = (1 - out(seg(a, 0.6, 1))) * 26;
+      card.style.transform = `translateX(${cardTx}px)`;
+
+      // #gl pointer events only while st < 1.02
+      glCanvas.style.pointerEvents = st < 1.02 ? 'auto' : 'none';
+
+      // region
+      const regOp = seg(b, 0.14, 0.26) * (1 - seg(b, 0.42, 0.52));
+      regionEl.style.opacity = regOp.toFixed(4);
+      regionEl.style.left = `${cx}px`;
+      regionEl.style.top = `${cy}px`;
+
+      // fog
+      const fi = seg(b, 0.36, 0.54);
+      const fo = seg(b, 0.62, 0.96);
+      fog.style.opacity = (fi * (1 - fo)).toFixed(4);
+
+      // Landing layers (visible when b > 0.5)
+      const landVis = b > 0.45;
+      land.style.display = landVis ? 'block' : 'none';
+      fore.style.display = landVis ? 'block' : 'none';
+      dest.style.display = landVis ? 'block' : 'none';
+
+      if (landVis) {
+        const lk = out(seg(b, 0.5, 1));
+        const fk = out(seg(b, 0.58, 1));
+        const dk = out(seg(b, 0.66, 0.98));
+        const drift = 1 + 0.02 * Math.sin(t * 0.18);
+
+        const landY = mix(0.2 * H, mouseY * -8, lk);
+        const landScale = mix(1.3, 1.05, lk) * drift;
+        land.style.transform = `translate(${mouseX * -14}px, ${landY}px) scale(${landScale})`;
+
+        const foreY = mix(0.42 * H, 0, fk);
+        fore.style.transform = `translate(${mouseX * -46}px, ${foreY}px) scale(1.06)`;
+
+        const destEnd = portrait ? 0.3 * H : 0.27 * H;
+        const destY = mix(0.62 * H, destEnd, dk);
+        dest.style.transform = `translate(${mouseX * -26}px, ${destY}px)`;
+
+        const smallEl = dest.querySelector('small');
+        if (smallEl) {
+          smallEl.style.opacity = (seg(b, 0.8, 1) * 0.92).toFixed(4);
+        }
+      }
+
+      // bar
+      const bk = seg(b, 0.86, 1);
+      bar.style.opacity = bk.toFixed(4);
+      bar.style.transform = `translate(-50%, ${(1 - out(bk)) * 34}px)`;
+      bar.style.pointerEvents = bk < 0.1 ? 'none' : 'auto';
+
+      // scrim
+      scrim.style.opacity = seg(b, 0.6, 0.9).toFixed(4);
+
+      // rail active state
+      const curDot = Math.round(st);
+      railButtons.forEach((btn, idx) => {
+        if (idx === curDot) btn.classList.add('on');
+        else btn.classList.remove('on');
+      });
+
+      // 8. Render Dust motes
+      dustCtx.clearRect(0, 0, W, H);
+      const landingDustFactor = (b > 0.5) ? 0.7 : 1.0;
+      for (let i = 0; i < motes.length; i++) {
+        const m = motes[i];
+        const mx = (((m.x + t * m.s + 2) % 1.1) - 0.05) * W;
+        const my = (m.y + Math.sin(t * 0.3 + m.p) * 0.02) * H;
+        const alpha = (0.3 + 0.35 * Math.pow(Math.sin(t * 0.7 + m.p), 2)) * landingDustFactor;
+        dustCtx.globalAlpha = alpha;
+        dustCtx.drawImage(dustSprite, mx - m.r, my - m.r, m.r * 2, m.r * 2);
+      }
+
+      // Render Three.js scene
+      renderer.render(scene, camera);
+
+      requestAnimationFrame(render);
+    }
+
+    requestAnimationFrame(render);
+  </script>
+</body>
+</html>

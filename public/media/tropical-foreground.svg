@@ -1,0 +1,85 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 2400 1350" preserveAspectRatio="none">
+  <defs>
+    <linearGradient id="deckGrad" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#051518" stop-opacity="0.88"/>
+      <stop offset="100%" stop-color="#020b0d" stop-opacity="0.98"/>
+    </linearGradient>
+    <linearGradient id="railGrad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#0a262c" stop-opacity="0.85"/>
+      <stop offset="50%" stop-color="#11363e" stop-opacity="0.75"/>
+      <stop offset="100%" stop-color="#0a262c" stop-opacity="0.85"/>
+    </linearGradient>
+    <linearGradient id="leafGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#081e22" stop-opacity="0.95"/>
+      <stop offset="100%" stop-color="#030f11" stop-opacity="0.9"/>
+    </linearGradient>
+  </defs>
+
+  <!-- TOP LEFT PALM CANOPY -->
+  <g fill="url(#leafGrad)">
+    <!-- Main stem 1 -->
+    <path d="M-60,-40 Q320,120 540,320 Q310,140 -60,-20 Z"/>
+    <!-- Fronds along stem 1 -->
+    <path d="M120,40 Q180,180 140,290 Q160,170 140,55 Z"/>
+    <path d="M180,75 Q270,220 230,340 Q240,200 200,90 Z"/>
+    <path d="M250,115 Q360,260 320,380 Q320,240 270,130 Z"/>
+    <path d="M320,165 Q440,300 400,420 Q400,280 340,180 Z"/>
+    <path d="M390,220 Q500,340 470,450 Q460,320 410,235 Z"/>
+    <path d="M460,270 Q560,380 540,480 Q520,360 480,285 Z"/>
+
+    <!-- Stem 2 curving higher -->
+    <path d="M-40,80 Q240,180 420,460 Q220,200 -40,100 Z"/>
+    <path d="M110,135 Q220,320 200,440 Q190,300 130,150 Z"/>
+    <path d="M190,190 Q310,380 290,500 Q270,360 210,210 Z"/>
+    <path d="M270,260 Q390,440 380,560 Q350,420 290,280 Z"/>
+
+    <!-- Soft hanging monstera silhouettes -->
+    <path d="M0,180 Q80,260 60,380 Q20,340 10,240 Z"/>
+    <path d="M-20,310 Q60,400 40,520 Q-10,480 -30,380 Z"/>
+  </g>
+
+  <!-- TOP RIGHT PALM CANOPY -->
+  <g fill="url(#leafGrad)">
+    <path d="M2460,-40 Q2080,110 1860,310 Q2090,130 2460,-20 Z"/>
+    <path d="M2280,40 Q2220,180 2260,290 Q2240,170 2260,55 Z"/>
+    <path d="M2220,75 Q2130,220 2170,340 Q2160,200 2200,90 Z"/>
+    <path d="M2150,115 Q2040,260 2080,380 Q2080,240 2130,130 Z"/>
+    <path d="M2080,165 Q1960,300 2000,420 Q2000,280 2060,180 Z"/>
+    <path d="M2010,220 Q1900,340 1930,450 Q1940,320 1990,235 Z"/>
+    <path d="M1940,270 Q1840,380 1860,480 Q1880,360 1920,285 Z"/>
+
+    <path d="M2440,80 Q2160,180 1980,460 Q2180,200 2440,100 Z"/>
+    <path d="M2290,135 Q2180,320 2200,440 Q2210,300 2270,150 Z"/>
+    <path d="M2210,190 Q2090,380 2110,500 Q2130,360 2190,210 Z"/>
+  </g>
+
+  <!-- BOTTOM VILLA TERRACE & INFINITY BALUSTRADE -->
+  <g>
+    <!-- Elegant teak terrace deck flooring at base -->
+    <path d="M0,1230 L2400,1230 L2400,1350 L0,1350 Z" fill="url(#deckGrad)"/>
+    <!-- Subtle teak board grooves -->
+    <path d="M0,1260 L2400,1260 M0,1290 L2400,1290 M0,1320 L2400,1320" stroke="#08252a" stroke-width="1.5" opacity="0.6"/>
+
+    <!-- Minimalist luxury balustrade handrail -->
+    <rect x="0" y="1175" width="2400" height="10" fill="url(#railGrad)"/>
+    <rect x="0" y="1220" width="2400" height="6" fill="#072025" opacity="0.9"/>
+
+    <!-- Slender architectural stanchions / glass post supports -->
+    <g fill="#0c2d33" opacity="0.85">
+      <rect x="180" y="1185" width="8" height="35"/>
+      <rect x="420" y="1185" width="8" height="35"/>
+      <rect x="660" y="1185" width="8" height="35"/>
+      <rect x="900" y="1185" width="8" height="35"/>
+      <rect x="1140" y="1185" width="8" height="35"/>
+      <rect x="1380" y="1185" width="8" height="35"/>
+      <rect x="1620" y="1185" width="8" height="35"/>
+      <rect x="1860" y="1185" width="8" height="35"/>
+      <rect x="2100" y="1185" width="8" height="35"/>
+      <rect x="2340" y="1185" width="8" height="35"/>
+    </g>
+
+    <!-- Glass barrier sheen reflection -->
+    <rect x="0" y="1185" width="2400" height="35" fill="rgba(120,210,230,0.04)"/>
+  </g>
+</svg>
+

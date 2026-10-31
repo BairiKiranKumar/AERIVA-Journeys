@@ -1,6 +1,9 @@
 import { useEffect, useRef } from 'react';
 import * as THREE from 'three';
-import { destinationById, type DestinationId } from '../data/destinations';
+import { type DestinationId } from '../data/destinations';
+import { EarthGlobe } from './Earth3D';
+import { MaldivesEnvironment } from './Maldives3D';
+import { AtmosphereDescent } from './AtmosphereDescent';
 
 export type JourneyStage = 0 | 1 | 2;
 
@@ -12,17 +15,6 @@ type Props = {
 };
 
 const TWO_PI = 2 * Math.PI;
-
-// Uses the same UV convention as THREE.SphereGeometry.
-function spherePoint(latitude: number, longitude: number, radius: number) {
-  const phi = ((longitude + 180) * Math.PI) / 180;
-  const theta = ((90 - latitude) * Math.PI) / 180;
-  return new THREE.Vector3(
-    -Math.cos(phi) * Math.sin(theta) * radius,
-    Math.cos(theta) * radius,
-    Math.sin(phi) * Math.sin(theta) * radius,
-  );
-}
 
 function closestAngle(current: number, target: number) {
   let diff = ((target - current + Math.PI) % TWO_PI + TWO_PI) % TWO_PI - Math.PI;
@@ -38,9 +30,15 @@ export default function GlobeCanvas({ stage, destinationId, reducedMotion, onTap
   useEffect(() => {
     const canvas = canvasRef.current;
     if (!canvas) return;
+
     let renderer: THREE.WebGLRenderer;
     try {
-      renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true, powerPreference: 'high-performance' });
+      renderer = new THREE.WebGLRenderer({
+        canvas,
+        alpha: true,
+        antialias: true,
+        powerPreference: 'high-performance',
+      });
     } catch {
       canvas.parentElement?.classList.add('globe-fallback');
       return;
@@ -48,107 +46,103 @@ export default function GlobeCanvas({ stage, destinationId, reducedMotion, onTap
 
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.7));
     renderer.outputColorSpace = THREE.SRGBColorSpace;
-    renderer.setClearColor(0x000000, 0);
+    renderer.setClearColor(0x04191d, 1.0); // Rich deep petrol background
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
     const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(37, 1, 0.1, 100);
-    camera.position.set(0, 0, 10.6);
-    const globe = new THREE.Group();
-    globe.rotation.set(0.13, 0.7, 0);
-    scene.add(globe);
+    // Distance haze matching AERIVA midnight teal
+    const sceneFog = new THREE.FogExp2(0x06282e, 0.012);
+    scene.fog = sceneFog;
 
-    const loader = new THREE.TextureLoader();
-    const day = loader.load(`${import.meta.env.BASE_URL}media/earth-day.jpg`);
-    day.colorSpace = THREE.SRGBColorSpace;
-    day.anisotropy = Math.min(renderer.capabilities.getMaxAnisotropy(), 8);
-    const clouds = loader.load(`${import.meta.env.BASE_URL}media/earth-clouds.png`);
-    clouds.colorSpace = THREE.SRGBColorSpace;
+    const camera = new THREE.PerspectiveCamera(40, 1, 0.1, 150);
+    camera.position.set(0, 0.3, 10.6);
 
-    const earthGeo = new THREE.SphereGeometry(2.63, 96, 64);
-    const earthMat = new THREE.MeshStandardMaterial({
-      map: day,
-      roughness: 0.92,
-      metalness: 0,
-      emissive: new THREE.Color(0x07303b),
-      emissiveIntensity: 0.14,
-    });
-    globe.add(new THREE.Mesh(earthGeo, earthMat));
+    // 1. Lighting Rig
+    const ambientLight = new THREE.AmbientLight(0x75c8c5, 0.9);
+    scene.add(ambientLight);
 
-    const cloudMat = new THREE.MeshLambertMaterial({
-      map: clouds,
-      transparent: true,
-      opacity: 0.45,
-      depthWrite: false,
-    });
-    const cloudMesh = new THREE.Mesh(new THREE.SphereGeometry(2.66, 80, 48), cloudMat);
-    globe.add(cloudMesh);
+    const hemiLight = new THREE.HemisphereLight(0x6ac2e2, 0x07262b, 1.15);
+    scene.add(hemiLight);
 
-    const atmosphere = new THREE.Mesh(
-      new THREE.SphereGeometry(2.85, 64, 48),
-      new THREE.ShaderMaterial({
-        side: THREE.BackSide,
-        transparent: true,
-        depthWrite: false,
-        blending: THREE.AdditiveBlending,
-        vertexShader: `varying vec3 vN; varying vec3 vView; void main() { vec4 mv = modelViewMatrix * vec4(position, 1.0); vN = normalize(normalMatrix * normal); vView = normalize(-mv.xyz); gl_Position = projectionMatrix * mv; }`,
-        fragmentShader: `varying vec3 vN; varying vec3 vView; void main() { float rim = pow(1.0 - abs(dot(normalize(vN), normalize(vView))), 2.8); gl_FragColor = vec4(0.21, 0.72, 0.73, rim * 0.31); }`,
-      }),
-    );
-    scene.add(atmosphere);
-
-    scene.add(new THREE.AmbientLight(0x8fcac6, 1.0));
-    const sun = new THREE.DirectionalLight(0xfff1cc, 3.25);
-    sun.position.set(4, 2.5, 8);
+    const sun = new THREE.DirectionalLight(0xfff3d6, 3.1);
+    sun.position.set(12, 18, 14);
+    sun.castShadow = true;
+    sun.shadow.mapSize.width = 2048;
+    sun.shadow.mapSize.height = 2048;
+    sun.shadow.camera.near = 1.0;
+    sun.shadow.camera.far = 45;
+    sun.shadow.camera.left = -16;
+    sun.shadow.camera.right = 16;
+    sun.shadow.camera.top = 16;
+    sun.shadow.camera.bottom = -16;
+    sun.shadow.bias = -0.0004;
     scene.add(sun);
-    const fill = new THREE.DirectionalLight(0x0c6576, 1.15);
-    fill.position.set(-5, -3, -5);
-    scene.add(fill);
 
-    const markers = new Map<DestinationId, { ring: THREE.Mesh; dot: THREE.Mesh }>();
-    (['maldives', 'bali'] as const).forEach((id) => {
-      const location = destinationById(id);
-      const anchor = spherePoint(location.latitude, location.longitude, 2.72);
-      const normal = anchor.clone().normalize();
-      const dot = new THREE.Mesh(
-        new THREE.SphereGeometry(0.055, 16, 12),
-        new THREE.MeshBasicMaterial({ color: 0xd6ffee }),
-      );
-      dot.position.copy(anchor);
-      globe.add(dot);
-      const ring = new THREE.Mesh(
-        new THREE.RingGeometry(0.092, 0.107, 48),
-        new THREE.MeshBasicMaterial({ color: 0x8de5ce, side: THREE.DoubleSide, transparent: true, opacity: 0.8, depthWrite: false }),
-      );
-      ring.position.copy(anchor.clone().addScaledVector(normal, 0.02));
-      ring.quaternion.setFromUnitVectors(new THREE.Vector3(0, 0, 1), normal);
-      globe.add(ring);
-      markers.set(id, { ring, dot });
-    });
+    // Subtle blue fill from deep space
+    const fillLight = new THREE.DirectionalLight(0x0a5969, 1.0);
+    fillLight.position.set(-8, -4, -6);
+    scene.add(fillLight);
 
+    // 2. Starfield for orbital realism
     const starsGeo = new THREE.BufferGeometry();
     const positions: number[] = [];
-    // Deterministic star field, limited enough to keep mobile GPU use low.
-    for (let i = 0; i < 280; i++) {
+    for (let i = 0; i < 350; i++) {
       const t = i * 12.9898;
       const x = Math.sin(t) * 43758.5453;
       const y = Math.sin(t * 1.27) * 32714.3123;
       const z = Math.sin(t * 1.71) * 19713.9181;
-      positions.push((x - Math.floor(x) - 0.5) * 22, (y - Math.floor(y) - 0.5) * 15, -1.5 - (z - Math.floor(z)) * 8);
+      positions.push((x - Math.floor(x) - 0.5) * 32, (y - Math.floor(y) - 0.5) * 22, -8 - (z - Math.floor(z)) * 25);
     }
     starsGeo.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
-    const starsMat = new THREE.PointsMaterial({ color: 0x9bbeb3, size: 0.018, transparent: true, opacity: 0.35, depthWrite: false });
-    scene.add(new THREE.Points(starsGeo, starsMat));
+    const starsMat = new THREE.PointsMaterial({
+      color: 0xa2dcd3,
+      size: 0.024,
+      transparent: true,
+      opacity: 0.45,
+      depthWrite: false,
+    });
+    const starField = new THREE.Points(starsGeo, starsMat);
+    scene.add(starField);
 
-    let frame = 0;
-    let last = performance.now();
-    let pointerX = 0;
-    let pointerY = 0;
+    // 3. Three Main Cinematic Layers
+    const earth = new EarthGlobe(renderer);
+    scene.add(earth.group);
+
+    const descentRig = new AtmosphereDescent();
+    scene.add(descentRig.group);
+
+    const maldives = new MaldivesEnvironment();
+    // Position Maldives scene in world coordinates
+    maldives.group.position.set(0, -100, 0); // Initially tucked away until arrival
+    scene.add(maldives.group);
+
+    // Initial earth positioning
+    earth.group.position.set(1.4, 0, 0);
+    earth.group.rotation.set(0.12, 0.65, 0);
+
+    // 4. Animation and Camera State Machine
+    let animFrame = 0;
+    let lastTime = performance.now();
+    let currentProgress = stage as number; // 0.0 -> 1.0 -> 2.0
+    let targetProgress = stage as number;
+
+    // Pointer Interaction State
     let pointerDown = false;
     let moved = false;
-    let lastX = 0;
-    let lastY = 0;
-    let activePointer: number | null = null;
-    let spinVelocity = 0;
+    let lastPointerX = 0;
+    let lastPointerY = 0;
+    let pointerStartX = 0;
+    let pointerStartY = 0;
+    let activePointerId: number | null = null;
+    let spinVelocityX = 0;
+    let spinVelocityY = 0;
+
+    // Mouse Parallax for Stage 2 (Arrive)
+    let mouseParallaxX = 0;
+    let mouseParallaxY = 0;
+    let targetParallaxX = 0;
+    let targetParallaxY = 0;
 
     const resize = () => {
       const width = Math.max(1, canvas.clientWidth);
@@ -157,92 +151,227 @@ export default function GlobeCanvas({ stage, destinationId, reducedMotion, onTap
       camera.updateProjectionMatrix();
       renderer.setSize(width, height, false);
     };
+
     const observer = new ResizeObserver(resize);
     observer.observe(canvas);
     resize();
 
     const onPointerDown = (event: PointerEvent) => {
-      if (stateRef.current.stage === 2) return;
       pointerDown = true;
       moved = false;
-      activePointer = event.pointerId;
-      pointerX = lastX = event.clientX;
-      pointerY = lastY = event.clientY;
+      activePointerId = event.pointerId;
+      pointerStartX = lastPointerX = event.clientX;
+      pointerStartY = lastPointerY = event.clientY;
       canvas.setPointerCapture(event.pointerId);
     };
+
     const onPointerMove = (event: PointerEvent) => {
-      if (!pointerDown || stateRef.current.stage !== 0) return;
-      const dx = event.clientX - lastX;
-      const dy = event.clientY - lastY;
-      if (Math.abs(event.clientX - pointerX) + Math.abs(event.clientY - pointerY) > 6) moved = true;
-      globe.rotation.y += dx * 0.006;
-      globe.rotation.x = THREE.MathUtils.clamp(globe.rotation.x + dy * 0.003, -0.6, 0.6);
-      spinVelocity = dx * 0.001;
-      lastX = event.clientX;
-      lastY = event.clientY;
+      // Calculate normalized mouse coordinate for 3D parallax
+      const rect = canvas.getBoundingClientRect();
+      const normX = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+      const normY = -(((event.clientY - rect.top) / rect.height) * 2 - 1);
+      targetParallaxX = normX;
+      targetParallaxY = normY;
+
+      if (!pointerDown) return;
+
+      const dx = event.clientX - lastPointerX;
+      const dy = event.clientY - lastPointerY;
+      if (Math.abs(event.clientX - pointerStartX) + Math.abs(event.clientY - pointerStartY) > 6) {
+        moved = true;
+      }
+
+      // Drag rotates Earth in stage 0
+      if (stateRef.current.stage === 0) {
+        earth.group.rotation.y += dx * 0.0055;
+        earth.group.rotation.x = THREE.MathUtils.clamp(earth.group.rotation.x + dy * 0.0028, -0.65, 0.65);
+        spinVelocityX = dx * 0.0008;
+        spinVelocityY = dy * 0.0004;
+      }
+
+      lastPointerX = event.clientX;
+      lastPointerY = event.clientY;
     };
+
     const onPointerUp = (event: PointerEvent) => {
-      if (activePointer !== event.pointerId) return;
-      if (canvas.hasPointerCapture(event.pointerId)) canvas.releasePointerCapture(event.pointerId);
-      if (pointerDown && !moved && stateRef.current.stage === 0) stateRef.current.onTap();
+      if (activePointerId !== event.pointerId) return;
+      if (canvas.hasPointerCapture(event.pointerId)) {
+        canvas.releasePointerCapture(event.pointerId);
+      }
+      if (pointerDown && !moved && stateRef.current.stage === 0) {
+        stateRef.current.onTap();
+      }
       pointerDown = false;
-      activePointer = null;
+      activePointerId = null;
     };
+
     canvas.addEventListener('pointerdown', onPointerDown);
     canvas.addEventListener('pointermove', onPointerMove);
     canvas.addEventListener('pointerup', onPointerUp);
     canvas.addEventListener('pointercancel', onPointerUp);
 
+    // 5. Main Cinematic Render Loop
     const render = (now: number) => {
-      const dt = Math.min((now - last) / 1000, 0.05);
-      last = now;
-      const { stage: currentStage, destinationId: id, reducedMotion: motionOff } = stateRef.current;
-      const dest = destinationById(id);
-      if (currentStage === 0 && !pointerDown && !motionOff) {
-        globe.rotation.y += dt * 0.07 + spinVelocity;
-        spinVelocity *= Math.exp(-dt * 5);
-      } else if (currentStage >= 1) {
-        const p = spherePoint(dest.latitude, dest.longitude, 1).normalize();
-        const yaw = Math.atan2(-p.x, p.z);
-        const pitch = Math.atan2(p.y, Math.sqrt(p.x * p.x + p.z * p.z));
-        const smooth = motionOff ? 1 : 1 - Math.exp(-dt * 2.8);
-        globe.rotation.y += (closestAngle(globe.rotation.y, yaw) - globe.rotation.y) * smooth;
-        globe.rotation.x += (pitch - globe.rotation.x) * smooth;
-      }
-      const focus = currentStage >= 1 ? 1.17 : 1;
-      globe.scale.lerp(new THREE.Vector3(focus, focus, focus), motionOff ? 1 : 1 - Math.exp(-dt * 2.6));
-      cloudMesh.rotation.y += motionOff ? 0 : dt * 0.005;
-      atmosphere.rotation.copy(globe.rotation);
-      atmosphere.scale.copy(globe.scale);
-      markers.forEach(({ ring, dot }, markerId) => {
-        const selected = markerId === id && currentStage >= 1;
-        ring.scale.setScalar(selected ? 1.25 + (motionOff ? 0 : Math.sin(now * 0.003) * 0.15) : 0.75);
-        (ring.material as THREE.MeshBasicMaterial).opacity = selected ? 0.98 : 0.55;
-        dot.scale.setScalar(selected ? 1.3 : 0.8);
-      });
-      renderer.render(scene, camera);
-      frame = requestAnimationFrame(render);
-    };
-    frame = requestAnimationFrame(render);
+      const dt = Math.min((now - lastTime) / 1000, 0.05);
+      lastTime = now;
 
+      const { stage: activeStage, destinationId: currentDest, reducedMotion: motionOff } = stateRef.current;
+      targetProgress = activeStage;
+
+      // Smooth progress interpolation between acts
+      if (motionOff) {
+        currentProgress = targetProgress;
+      } else {
+        const speed = currentProgress < targetProgress ? 2.2 : 2.6;
+        currentProgress += (targetProgress - currentProgress) * (1 - Math.exp(-dt * speed));
+      }
+
+      const isMobile = window.innerWidth <= 820;
+
+      // --- ACT 1 & ACT 2: Earth Orientation & Camera ---
+      const destOrientation = earth.getTargetOrientation(currentDest);
+
+      if (currentProgress < 1.4) {
+        // Orbit / Locate phase
+        if (activeStage === 0 && !pointerDown && !motionOff) {
+          earth.group.rotation.y += dt * 0.065 + spinVelocityX;
+          earth.group.rotation.x += spinVelocityY;
+          spinVelocityX *= Math.exp(-dt * 4.5);
+          spinVelocityY *= Math.exp(-dt * 4.5);
+        } else if (activeStage >= 1) {
+          // Smoothly lock onto target destination
+          const smooth = motionOff ? 1.0 : 1 - Math.exp(-dt * 3.2);
+          earth.group.rotation.y += (closestAngle(earth.group.rotation.y, destOrientation.yaw) - earth.group.rotation.y) * smooth;
+          earth.group.rotation.x += (destOrientation.pitch - earth.group.rotation.x) * smooth;
+        }
+
+        // Earth framing
+        const earthTargetX = isMobile ? 0 : 1.5 - currentProgress * 0.6;
+        earth.group.position.x = earthTargetX;
+        earth.group.position.y = isMobile ? -0.2 : 0;
+      }
+
+      // Update Earth and Atmospheric Descent rigs
+      earth.update(now * 0.001, currentDest, activeStage, motionOff);
+      descentRig.updateTransition(currentProgress);
+
+      // --- ACT 2 to ACT 3: Camera Journey Transition ---
+      // Maldives 3D Arrival is featured for 'maldives'
+      const isMaldivesArrival = currentDest === 'maldives';
+
+      // Mouse Parallax smoothing
+      mouseParallaxX += (targetParallaxX - mouseParallaxX) * 0.06;
+      mouseParallaxY += (targetParallaxY - mouseParallaxY) * 0.06;
+
+      if (currentProgress <= 1.0) {
+        // Act 1 (Orbit) -> Act 2 (Locate)
+        // Camera in orbital position
+        const camZ = isMobile ? 12.0 : 10.6;
+        camera.position.set(0, 0.3, camZ);
+        camera.lookAt(isMobile ? 0 : 0.8, 0, 0);
+
+        // Keep Maldives hidden
+        maldives.group.position.set(0, -100, 0);
+        earth.group.visible = true;
+        starField.visible = true;
+        sceneFog.density = 0.008;
+      } else if (currentProgress > 1.0 && currentProgress < 1.99) {
+        // Continuous Camera Descent Transition
+        const p = currentProgress - 1.0; // 0.0 -> 1.0
+
+        if (isMaldivesArrival) {
+          // Camera descends from orbit through the clouds into an elevated aerial view over the lagoon
+          const orbitCam = new THREE.Vector3(0, 0.3, isMobile ? 12.0 : 10.6);
+          const lagoonCam = new THREE.Vector3(
+            (isMobile ? 1.0 : 3.6) + mouseParallaxX * 0.85,
+            (isMobile ? 5.8 : 5.2) + mouseParallaxY * 0.45,
+            isMobile ? 12.5 : 10.8
+          );
+
+          // Eased camera path with acceleration into clouds
+          const easeP = p * p * (3 - 2 * p);
+          camera.position.lerpVectors(orbitCam, lagoonCam, easeP);
+
+          const orbitLook = new THREE.Vector3(isMobile ? 0 : 0.8, 0, 0);
+          const lagoonLook = new THREE.Vector3(-0.6, 0.4, -4.0);
+          const currentLook = new THREE.Vector3().lerpVectors(orbitLook, lagoonLook, easeP);
+          camera.lookAt(currentLook);
+
+          // Transition visibility at cloud crossing (p = 0.5)
+          if (p >= 0.48) {
+            maldives.group.position.set(0, 0, 0);
+            earth.group.visible = false;
+            starField.visible = false;
+            sceneFog.density = 0.016;
+          } else {
+            maldives.group.position.set(0, -100, 0);
+            earth.group.visible = true;
+            starField.visible = true;
+            sceneFog.density = 0.008;
+          }
+        } else {
+          // Honest fallback for Bali: keeps camera locked in high orbit view with destination marker
+          camera.position.set(0, 0.3, isMobile ? 12.0 : 10.6);
+          camera.lookAt(0, 0, 0);
+          maldives.group.position.set(0, -100, 0);
+          earth.group.visible = true;
+        }
+      } else {
+        // Act 3: Arrived in 3D Maldives Island Environment!
+        if (isMaldivesArrival) {
+          maldives.group.position.set(0, 0, 0);
+          earth.group.visible = false;
+          starField.visible = false;
+          sceneFog.density = 0.016;
+
+          // Cinematic aerial glide over the resort
+          const time = now * 0.0006;
+          const driftX = Math.sin(time) * 0.28;
+          const driftY = Math.cos(time * 0.8) * 0.14;
+
+          const baseCamX = isMobile ? 1.0 : 3.6;
+          const baseCamY = isMobile ? 5.8 : 5.2;
+          const baseCamZ = isMobile ? 12.5 : 10.8;
+
+          camera.position.set(
+            baseCamX + mouseParallaxX * 0.95 + driftX,
+            baseCamY + mouseParallaxY * 0.45 + driftY,
+            baseCamZ - mouseParallaxY * 0.45
+          );
+
+          camera.lookAt(-0.6 + mouseParallaxX * 0.35, 0.4, -4.0);
+        } else {
+          maldives.group.position.set(0, -100, 0);
+          earth.group.visible = true;
+          camera.position.set(0, 0.3, 10.6);
+          camera.lookAt(0, 0, 0);
+        }
+      }
+
+      // Update dynamic 3D Maldives ocean ripples, frond sway, and lighting
+      if (maldives.group.visible && maldives.group.position.y === 0) {
+        maldives.update(now * 0.001);
+      }
+
+      renderer.render(scene, camera);
+      animFrame = requestAnimationFrame(render);
+    };
+
+    animFrame = requestAnimationFrame(render);
+
+    // 6. Cleanup GPU Resources on Unmount
     return () => {
-      cancelAnimationFrame(frame);
+      cancelAnimationFrame(animFrame);
       observer.disconnect();
       canvas.removeEventListener('pointerdown', onPointerDown);
       canvas.removeEventListener('pointermove', onPointerMove);
       canvas.removeEventListener('pointerup', onPointerUp);
       canvas.removeEventListener('pointercancel', onPointerUp);
-      globe.traverse((node) => {
-        if (node instanceof THREE.Mesh) {
-          node.geometry.dispose();
-          const materials = Array.isArray(node.material) ? node.material : [node.material];
-          materials.forEach((material) => material.dispose());
-        }
-      });
-      day.dispose();
-      clouds.dispose();
-      (atmosphere.geometry as THREE.BufferGeometry).dispose();
-      (atmosphere.material as THREE.Material).dispose();
+
+      earth.dispose();
+      descentRig.dispose();
+      maldives.dispose();
+
       starsGeo.dispose();
       starsMat.dispose();
       renderer.dispose();
@@ -250,5 +379,11 @@ export default function GlobeCanvas({ stage, destinationId, reducedMotion, onTap
     };
   }, []);
 
-  return <canvas className="globe-canvas" ref={canvasRef} aria-label="Interactive 3D Earth. Drag to rotate, or use the destination buttons." />;
+  return (
+    <canvas
+      className="globe-canvas"
+      ref={canvasRef}
+      aria-label="Cinematic 3D Earth to Maldives journey. Drag to rotate in orbit, or click to experience the island arrival."
+    />
+  );
 }
